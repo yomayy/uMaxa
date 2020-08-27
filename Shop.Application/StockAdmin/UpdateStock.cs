@@ -28,7 +28,7 @@ namespace Shop.Application.StockAdmin
 					Quantity = stock.Quantity,
 					ProductId = stock.ProductId,
 					CreatedOn = stock?.CreatedOn,
-					ModifiedOn = stock?.ModifiedOn
+					ModifiedOn = DateTime.UtcNow
 				});
 			}
 
