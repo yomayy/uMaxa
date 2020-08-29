@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Stripe.net" Version="37.35.0" />
     <PackageReference Include="vue" Version="2.6.11" />
   </ItemGroup>
 
