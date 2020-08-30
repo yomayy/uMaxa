@@ -11,5 +11,9 @@ namespace Shop.Domain.Models
 
 		public Guid OrderId { get; set; }
 		public Order Order { get; set; }
+
+		public int Quantity { get; set; }
+		public Guid StockId { get; set; }
+		public Stock Stock { get; set; }
 	}
 }
