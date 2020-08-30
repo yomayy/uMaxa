@@ -12,6 +12,5 @@ namespace Shop.Domain.Models
 		public decimal Value { get; set; }
 
 		public ICollection<Stock> Stocks { get; set; }
-		public ICollection<OrderProduct> OrderProducts { get; set; }
 	}
 }
