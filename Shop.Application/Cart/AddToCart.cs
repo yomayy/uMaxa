@@ -28,21 +28,27 @@ namespace Shop.Application.Cart
 
 		public async Task<bool> Do(Request request) {
 
-
-
+			var stockOnHold = _context.StocksOnHold.Where(x => x.SessionId == _session.Id)
+				?.ToList();
 			var stockToHold = _context.Stocks.Where(x => x.Id == request.StockId)
 				.FirstOrDefault();
+
 			if(stockToHold.Quantity < request.Quantity) {
 				return false;
 			}
 
 			_context.StocksOnHold.Add(new StockOnHold {
 				StockId = stockToHold.Id,
+				SessionId = _session.Id,
 				Quantity = request.Quantity,
 				ExpiryDate = DateTime.UtcNow.AddMinutes(20)
 			});
 
 			stockToHold.Quantity = stockToHold.Quantity - request.Quantity;
+
+			stockOnHold?.ForEach(stock => {
+				stock.ExpiryDate = DateTime.UtcNow.AddMinutes(20);
+			});
 
 			await _context.SaveChangesAsync();
 

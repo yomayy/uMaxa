@@ -8,6 +8,8 @@ namespace Shop.Domain.Models
 	{
 		public Guid Id { get; set; }
 
+		public string SessionId { get; set; }
+
 		public Guid StockId { get; set; }
 		public Stock Stock { get; set; }
 
