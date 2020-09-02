@@ -34,7 +34,7 @@ namespace Shop.UI
 
 			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["DefaultConnection"]));
 
-			services.AddDefaultIdentity<IdentityUser>(options => {
+			services.AddIdentity<IdentityUser, IdentityRole>(options => {
 				options.Password.RequireDigit = false;
 				options.Password.RequiredLength = 6;
 				options.Password.RequireNonAlphanumeric = false;
@@ -42,12 +42,21 @@ namespace Shop.UI
 			})
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 
-			services.AddAuthorization(options => {  // are you allowed?
-				options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
-				options.AddPolicy("Manager", policy => policy.RequireClaim("Manager"));
+			services.ConfigureApplicationCookie(options => {
+				options.LoginPath = "/Account/Login";
 			});
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddAuthorization(options => {  // are you allowed?
+				options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+				options.AddPolicy("Manager", policy => policy.RequireClaim("Role", "Manager"));
+			});
+
+			services
+				.AddMvc()
+				.AddRazorPagesOptions(options => {
+					options.Conventions.AuthorizeFolder("/Admin");
+				})
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 			services.AddSession(options => {
 				options.Cookie.Name = "Cart";
@@ -75,7 +84,7 @@ namespace Shop.UI
 
 			app.UseAuthentication();
 
-			app.UseMvc();
+			app.UseMvcWithDefaultRoute();
 		}
 	}
 }
