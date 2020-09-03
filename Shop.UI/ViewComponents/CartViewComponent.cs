@@ -17,6 +17,11 @@ namespace Shop.UI.ViewComponents
 		}
 
 		public IViewComponentResult Invoke(string view = "Default") {
+			if(view == "Small") {
+				var totalValue = new GetCart(HttpContext.Session, _context).Do()
+					?.Sum(x => x?.RealValue * x?.Quantity);
+				return View(view, $"{totalValue}$");
+			}
 			return View(view, new GetCart(HttpContext.Session, _context).Do());
 		}
 	}

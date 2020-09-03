@@ -18,7 +18,7 @@ namespace Shop.Application.Products
 			return _context.Products.ToList().Select(p => new ProductViewModel {
 				Name = p.Name,
 				Description = p.Description,
-				Value = $"{p.Value.ToString("N2")} $" // 1100.50 => 1,100.50 => $ 1,100.50
+				Value = $"{p.Value.ToString("N2")}$" // 1100.50 => 1,100.50 => $ 1,100.50
 			});
 		}
 

@@ -3,23 +3,74 @@
 @{
 }
 
-<div>
-	<p>@Model.Product?.Name</p>
-	<p>@Model.Product?.Description</p>
-	<p>@Model.Product?.Value</p>
-	<div>
-		<form method="post">
-			<label>Stock</label>
-			<select asp-for="CartViewModel.StockId">
-				@foreach (var s in Model.Product.Stocks) {
-					<option value="@s.Id">@s.Description</option>
-				}
-			</select>
-			<label>Quantity:</label>
-			<input asp-for="CartViewModel.Quantity" />
-			<button type="submit">Submit</button>
-		</form>
+<div class="hero">
+	<div class="hero-body">
+		<div class="container">
+			<div class="columns">
+				<div class="column is-6">
+					<figure class="image">
+						<img src="~/images/item1.jpg" />
+					</figure>
+				</div>
+				<div class="column is-6">
+					<section class="content">
+						<p class="title">@Model.Product?.Name</p>
+						<p class="subtitle">@Model.Product?.Description</p>
+						<p>
+							At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+						</p>
+						<footer>
+							<form method="post">
+
+								<div class="field is-horizontal">
+									<div class="field-label is-normal">
+										<label class="label">Size</label>
+									</div>
+									<div class="field-body">
+										<div class="field is-narrow">
+											<div class="control">
+												<div class="select is-fullwidth">
+													<select asp-for="CartViewModel.StockId">
+														@foreach (var s in Model.Product.Stocks) {
+															<option value="@s.Id">@s.Description</option>
+														}
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="field is-horizontal">
+									<div class="field-label is-normal">
+										<label class="label">Quantity</label>
+									</div>
+									<div class="field-body">
+										<div class="field is-narrow">
+											<div class="control">
+												<input class="input" asp-for="CartViewModel.Quantity" value="0" />
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="field is-horizontal">
+									<div class="field-label is-normal">
+									</div>
+									<div class="field-body">
+										<div class="field is-narrow">
+											<div class="control">
+												<button class="button is-success" type="submit">Submit</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</form>
+						</footer>
+					</section>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
-
-@await Component.InvokeAsync("Cart")
