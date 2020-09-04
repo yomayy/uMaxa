@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Shop.Application.OrdersAdmin;
 using Shop.Database;
 using System;
 using System.Collections.Generic;
@@ -13,18 +14,37 @@ namespace Shop.UI.Controllers
 	public class OrdersController : Controller
 	{
 
-		private ApplicationDbContext _context;
+		//private ApplicationDbContext _context;
 
-		public OrdersController(ApplicationDbContext context) {
-			_context = context;
-		}
-		//[HttpGet("orders")]
+		//public OrdersController(ApplicationDbContext context) {
+		//	_context = context;
+		//}
+		//[HttpGet("")]
 		//public IActionResult GetOrders(int status) => Ok(new GetOrders(_context).Do(status));
 
-		//[HttpGet("orders/{id}")]
+		[HttpGet("")]
+		public IActionResult GetOrders(
+			int status,
+			[FromServices] GetOrders getOrders) =>
+				Ok(getOrders.Do(status));
+
+		//[HttpGet("{id}")]
 		//public IActionResult GetOrder(Guid id) => Ok(new GetOrder(_context).Do(id));
 
-		//[HttpPut("orders/{id}")]
+		[HttpGet("{id}")]
+		public IActionResult GetOrder(
+			Guid id,
+			[FromServices] GetOrder getOrder) =>
+				Ok(getOrder.Do(id));
+
+		//[HttpPut("{id}")]
 		//public async Task<IActionResult> UpdateOrder(Guid id) => Ok((await new UpdateOrder(_context).Do(id)));
+
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateOrder(
+			Guid id,
+			[FromServices] UpdateOrder updateOrder) =>
+				Ok(await updateOrder.DoAsync(id));
+
 	}
 }

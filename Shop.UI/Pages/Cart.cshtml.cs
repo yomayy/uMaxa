@@ -19,10 +19,14 @@ namespace Shop.UI.Pages
 
 		public IEnumerable<GetCart.Response> Cart { get; set; }
 
-		public IActionResult OnGet()
-        {
-            Cart = new GetCart(HttpContext.Session, _context).Do();
-            return Page();
-        }
-    }
+		public IActionResult OnGet() {
+			Cart = new GetCart(HttpContext.Session, _context).Do();
+			return Page();
+		}
+
+		//public IActionResult OnGet([FromServices] GetCart getCart) {
+		//	Cart = getCart.Do();
+		//	return Page();
+		//}
+	}
 }
