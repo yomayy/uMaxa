@@ -43,7 +43,7 @@ namespace Shop.Application.Products
 					Stocks = p.Stocks.Select(y => new StockViewModel {
 						Id = y.Id,
 						Description = y.Description,
-						InStock = y.Quantity > 0
+						Quantity = y.Quantity
 					})
 				})
 				.FirstOrDefault();
@@ -61,7 +61,7 @@ namespace Shop.Application.Products
 		{
 			public Guid Id { get; set; }
 			public string Description { get; set; }
-			public bool InStock { get; set; }
+			public int Quantity { get; set; }
 		}
 	}
 }
