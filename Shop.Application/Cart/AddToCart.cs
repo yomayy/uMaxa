@@ -37,12 +37,17 @@ namespace Shop.Application.Cart
 				return false;
 			}
 
-			_context.StocksOnHold.Add(new StockOnHold {
-				StockId = stockToHold.Id,
-				SessionId = _session.Id,
-				Quantity = request.Quantity,
-				ExpiryDate = DateTime.UtcNow.AddMinutes(20)
-			});
+			if(stockOnHold.Any(x => x.StockId == request.StockId)) {
+				stockOnHold.Find(x => x.StockId == request.StockId).Quantity += request.Quantity;
+			}
+			else {
+				_context.StocksOnHold.Add(new StockOnHold {
+					StockId = stockToHold.Id,
+					SessionId = _session.Id,
+					Quantity = request.Quantity,
+					ExpiryDate = DateTime.UtcNow.AddMinutes(20)
+				});
+			}
 
 			stockToHold.Quantity = stockToHold.Quantity - request.Quantity;
 
