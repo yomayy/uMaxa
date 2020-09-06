@@ -1,8 +1,6 @@
 ﻿using Shop.Domain.BaseModels;
 using Shop.Domain.Enums;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shop.Domain.Models
 {

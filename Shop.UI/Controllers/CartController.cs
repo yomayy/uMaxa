@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shop.Application.Cart;
-using Shop.Database;
+using System;
+using System.Threading.Tasks;
 
 namespace Shop.UI.Controllers
 {
 	[Route("[controller]/[action]")]
 	public class CartController : Controller
 	{
-		private ApplicationDbContext _context;
-
-		public CartController(ApplicationDbContext context) {
-			_context = context;
-		}
-
 		[HttpPost("{stockId}")]
-		public async Task<IActionResult> AddOne(Guid stockId) {
+		public async Task<IActionResult> AddOne(
+			Guid stockId,
+			[FromServices] AddToCart addToCart) {
 			var request = new AddToCart.Request {
 				StockId = stockId,
 				Quantity = 1
 			};
-			var addToCart = new AddToCart(HttpContext.Session, _context);
 
 			var success = await addToCart.Do(request);
 			if (success) {
@@ -33,12 +25,13 @@ namespace Shop.UI.Controllers
 		}
 
 		[HttpPost("{stockId}")]
-		public async Task<IActionResult> RemoveOne(Guid stockId) {
+		public async Task<IActionResult> RemoveOne(
+			Guid stockId,
+			[FromServices] RemoveFromCart removeFromCart) {
 			var request = new RemoveFromCart.Request {
 				StockId = stockId,
 				Quantity = 1
 			};
-			var removeFromCart = new RemoveFromCart(HttpContext.Session, _context);
 
 			var success = await removeFromCart.Do(request);
 			if (success) {
@@ -48,12 +41,13 @@ namespace Shop.UI.Controllers
 		}
 
 		[HttpPost("{stockId}")]
-		public async Task<IActionResult> RemoveAll(Guid stockId) {
+		public async Task<IActionResult> RemoveAll(
+			Guid stockId,
+			[FromServices] RemoveFromCart removeFromCart) {
 			var request = new RemoveFromCart.Request {
 				StockId = stockId,
 				All = true
 			};
-			var removeFromCart = new RemoveFromCart(HttpContext.Session, _context);
 
 			var success = await removeFromCart.Do(request);
 			if (success) {

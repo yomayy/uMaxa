@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,7 +5,7 @@ using Shop.Application.Cart;
 
 namespace Shop.UI.Pages.Checkout
 {
-    public class CustomerInformationModel : PageModel
+	public class CustomerInformationModel : PageModel
     {
 		private IHostingEnvironment _environment;
 
@@ -20,10 +16,12 @@ namespace Shop.UI.Pages.Checkout
         [BindProperty]
 		public AddCustomerInformation.Request CustomerInformation { get; set; }
 
-		public IActionResult OnGet()
+		public IActionResult OnGet(
+            [FromServices] GetCustomerInformation getCustomerInformation)
         {
-            var information = new GetCustomerInformation(HttpContext.Session).Do();
+            var information = getCustomerInformation.Do();
             if(information == null) {
+                //
                 #region DevEnvOnly
                 if (_environment.IsDevelopment()) {
                     CustomerInformation = new AddCustomerInformation.Request {
@@ -38,6 +36,7 @@ namespace Shop.UI.Pages.Checkout
                     };
                 }
                 #endregion
+                //
                 return Page();
 			}
 			else {
@@ -45,11 +44,12 @@ namespace Shop.UI.Pages.Checkout
 			}
         }
 
-        public IActionResult OnPost() {
+        public IActionResult OnPost(
+            [FromServices] AddCustomerInformation addCustomerInformation) {
 			if (!ModelState.IsValid) {
                 return Page();
 			}
-            new AddCustomerInformation(HttpContext.Session).Do(CustomerInformation);
+            addCustomerInformation.Do(CustomerInformation);
 
             return RedirectToPage("/Checkout/Payment");
         }

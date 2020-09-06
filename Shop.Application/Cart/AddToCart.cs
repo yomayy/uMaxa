@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+﻿using Shop.Application.Infrastructure;
 using Shop.Database;
 using Shop.Domain.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Shop.Application.Cart
@@ -13,11 +10,11 @@ namespace Shop.Application.Cart
 	public class AddToCart
 	{
 		private ApplicationDbContext _context;
-		private ISession _session;
+		private ISessionManager _sessionManager;
 
-		public AddToCart(ISession session, ApplicationDbContext context) {
+		public AddToCart(ISessionManager sessionManager, ApplicationDbContext context) {
 			_context = context;
-			_session = session;
+			_sessionManager = sessionManager;
 		}
 
 		public class Request
@@ -28,7 +25,7 @@ namespace Shop.Application.Cart
 
 		public async Task<bool> Do(Request request) {
 
-			var stockOnHold = _context.StocksOnHold.Where(x => x.SessionId == _session.Id)
+			var stockOnHold = _context.StocksOnHold.Where(x => x.SessionId == _sessionManager.GetId())
 				?.ToList();
 			var stockToHold = _context.Stocks.Where(x => x.Id == request.StockId)
 				.FirstOrDefault();
@@ -43,7 +40,7 @@ namespace Shop.Application.Cart
 			else {
 				_context.StocksOnHold.Add(new StockOnHold {
 					StockId = stockToHold.Id,
-					SessionId = _session.Id,
+					SessionId = _sessionManager.GetId(),
 					Quantity = request.Quantity,
 					ExpiryDate = DateTime.UtcNow.AddMinutes(20)
 				});
@@ -57,24 +54,7 @@ namespace Shop.Application.Cart
 
 			await _context.SaveChangesAsync();
 
-			var cartList = new List<CartProduct>();
-			var stringObj = _session.GetString("cart");
-			if (!string.IsNullOrEmpty(stringObj)) {
-				cartList = JsonConvert.DeserializeObject<List<CartProduct>>(stringObj);
-			}
-			if(cartList.Any(x => x.StockId == request.StockId)) {
-				cartList.Find(x => x.StockId == request.StockId).Quantity += request.Quantity;
-			}
-			else {
-				cartList.Add(new CartProduct {
-					StockId = request.StockId,
-					Quantity = request.Quantity
-				});
-			}
-
-			stringObj = JsonConvert.SerializeObject(cartList);
-
-			_session.SetString("cart", stringObj);
+			_sessionManager.AddProduct(request.StockId, request.Quantity);
 
 			return true;
 		}

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
@@ -10,10 +5,13 @@ using Shop.Application.Cart;
 using Shop.Application.Orders;
 using Shop.Database;
 using Stripe;
+using System.Linq;
+using System.Threading.Tasks;
+using GetOrderCart = Shop.Application.Cart.GetOrder;
 
 namespace Shop.UI.Pages.Checkout
 {
-    public class PaymentModel : PageModel
+	public class PaymentModel : PageModel
     {
 		public string PublicKey { get; }
 
@@ -24,21 +22,24 @@ namespace Shop.UI.Pages.Checkout
             _context = context;
         }
 
-		public IActionResult OnGet()
+		public IActionResult OnGet(
+            [FromServices] GetCustomerInformation getCustomerInformation)
         {
-            var information = new GetCustomerInformation(HttpContext.Session).Do();
+            var information = getCustomerInformation.Do();
             if (information == null) {
                 return RedirectToPage("/Checkout/CustomerInformation");
             }
             return Page();
         }
 
-        public async Task<IActionResult> OnPost(string stripeEmail, string stripeToken) {
+        public async Task<IActionResult> OnPost(
+            string stripeEmail, string stripeToken,
+            [FromServices] GetOrderCart getOrder) {
 
             var customers = new CustomerService();
             var charges = new ChargeService();
 
-            var CartOrder = new Application.Cart.GetOrder(HttpContext.Session, _context).Do();
+            var cartOrder = getOrder.Do();
 
             var customer = customers.Create(new CustomerCreateOptions {
                 Email = stripeEmail,
@@ -46,7 +47,7 @@ namespace Shop.UI.Pages.Checkout
             });
 
             var charge = charges.Create(new ChargeCreateOptions {
-                Amount = CartOrder.GetTotalCharge(),
+                Amount = cartOrder.GetTotalCharge(),
                 Description = "Shop Purchase",
                 Currency = "usd",
                 Customer = customer.Id
@@ -58,15 +59,15 @@ namespace Shop.UI.Pages.Checkout
                 StripeReference = charge.Id,
                 SessionId = sessionId,
 
-                FirstName = CartOrder.CustomerInformation.FirstName,
-                LastName = CartOrder.CustomerInformation.LastName,
-                Email = CartOrder.CustomerInformation.Email,
-                PhoneNumber = CartOrder.CustomerInformation.PhoneNumber,
-                Address1 = CartOrder.CustomerInformation.Address1,
-                Address2 = CartOrder.CustomerInformation.Address2,
-                City = CartOrder.CustomerInformation.City,
-                PostCode = CartOrder.CustomerInformation.PostCode,
-                Stocks = CartOrder.Products.Select(x => new CreateOrder.Stock {
+                FirstName = cartOrder.CustomerInformation.FirstName,
+                LastName = cartOrder.CustomerInformation.LastName,
+                Email = cartOrder.CustomerInformation.Email,
+                PhoneNumber = cartOrder.CustomerInformation.PhoneNumber,
+                Address1 = cartOrder.CustomerInformation.Address1,
+                Address2 = cartOrder.CustomerInformation.Address2,
+                City = cartOrder.CustomerInformation.City,
+                PostCode = cartOrder.CustomerInformation.PostCode,
+                Stocks = cartOrder.Products.Select(x => new CreateOrder.Stock {
                     StockId = x.StockId,
                     Quantity = x.Quantity
 				}).ToList()

@@ -1,22 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Application.Infrastructure;
 using Shop.Database;
-using Shop.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Shop.Application.Cart
 {
 	public class GetOrder
 	{
-		private ISession _session;
+		private ISessionManager _sessionManager;
 		private ApplicationDbContext _context;
 
-		public GetOrder(ISession session, ApplicationDbContext context) {
-			_session = session;
+		public GetOrder(ISessionManager sessionManager, ApplicationDbContext context) {
+			_sessionManager = sessionManager;
 			_context = context;
 		}
 
@@ -50,22 +47,20 @@ namespace Shop.Application.Cart
 
 		public Response Do() {
 			//TODO: account for the multiple items in the cart.
-			var cart = _session.GetString("cart");
 
-			var cartList = JsonConvert.DeserializeObject<List<CartProduct>>(cart);
+			var cart = _sessionManager.GetCart();
 
 			var listOfProducts = _context?.Stocks
 				.Include(x => x.Product)
-				.Where(x => cartList.Any(y => y.StockId == x.Id))
+				.Where(x => cart.Any(y => y.StockId == x.Id))
 				.Select(x => new Product {
 					ProductId = x.ProductId,
 					StockId = x.Id,
 					Value = (int) (x.Product.Value * 100),
-					Quantity = cartList.FirstOrDefault(y => y.StockId == x.Id).Quantity
+					Quantity = cart.FirstOrDefault(y => y.StockId == x.Id).Quantity
 				}).ToList();
 
-			var customerInfoString = _session.GetString("customer-info");
-			var customerInformation = JsonConvert.DeserializeObject<Shop.Domain.Models.CustomerInformation>(customerInfoString);
+			var customerInformation = _sessionManager.GetCustomerInformation();
 
 			return new Response {
 				Products = listOfProducts,

@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace Shop.UI.Pages.Account
 {
-    public class LoginModel : PageModel
+	public class LoginModel : PageModel
     {
 		private SignInManager<IdentityUser> _signInManager;
 
