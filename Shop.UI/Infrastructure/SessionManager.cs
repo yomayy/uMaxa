@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Shop.Application.Infrastructure;
+using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -22,20 +22,17 @@ namespace Shop.UI.Infrastructure
 			_session.SetString("customer-info", stringObj);
 		}
 
-		public void AddProduct(Guid stockId, int quantity) {
+		public void AddProduct(CartProduct cartProduct) {
 			var cartList = new List<CartProduct>();
 			var stringObj = _session.GetString("cart");
 			if (!string.IsNullOrEmpty(stringObj)) {
 				cartList = JsonConvert.DeserializeObject<List<CartProduct>>(stringObj);
 			}
-			if (cartList.Any(x => x.StockId == stockId)) {
-				cartList.Find(x => x.StockId == stockId).Quantity += quantity;
+			if (cartList.Any(x => x.StockId == cartProduct.StockId)) {
+				cartList.Find(x => x.StockId == cartProduct.StockId).Quantity += cartProduct.Quantity;
 			}
 			else {
-				cartList.Add(new CartProduct {
-					StockId = stockId,
-					Quantity = quantity
-				});
+				cartList.Add(cartProduct);
 			}
 
 			stringObj = JsonConvert.SerializeObject(cartList);
@@ -43,13 +40,13 @@ namespace Shop.UI.Infrastructure
 			_session.SetString("cart", stringObj);
 		}
 
-		public List<CartProduct> GetCart() {
+		public IEnumerable<TResult> GetCart<TResult>(Func<CartProduct, TResult> selector) {
 			var stringObj = _session.GetString("cart");
 			if (string.IsNullOrEmpty(stringObj)) {
-				return null;
+				return new List<TResult>();
 			}
-			var cartList = JsonConvert.DeserializeObject<List<CartProduct>>(stringObj);
-			return cartList;
+			var cartList = JsonConvert.DeserializeObject<IEnumerable<CartProduct>>(stringObj);
+			return cartList.Select(selector);
 		}
 
 		public CustomerInformation GetCustomerInformation() {

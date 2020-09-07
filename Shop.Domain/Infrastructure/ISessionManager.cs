@@ -2,14 +2,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace Shop.Application.Infrastructure
+namespace Shop.Domain.Infrastructure
 {
 	public interface ISessionManager
 	{
 		string GetId();
-		void AddProduct(Guid stockId, int quantity);
+		void AddProduct(CartProduct cartProduct);
 		void RemoveProduct(Guid stockId, int quantity);
-		List<CartProduct> GetCart();
+		IEnumerable<TResult> GetCart<TResult>(Func<CartProduct, TResult> selector);
 
 		void AddCustomerInformation(CustomerInformation customer);
 		CustomerInformation GetCustomerInformation();
