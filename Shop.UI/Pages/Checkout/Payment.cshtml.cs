@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Shop.Application.Cart;
 using Shop.Application.Orders;
-using Shop.Database;
 using Stripe;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +14,8 @@ namespace Shop.UI.Pages.Checkout
     {
 		public string PublicKey { get; }
 
-		private ApplicationDbContext _context;
-
-		public PaymentModel(IConfiguration configuration, ApplicationDbContext context) {
+		public PaymentModel(IConfiguration configuration) {
             PublicKey = configuration["Stripe:PublicKey"].ToString();
-            _context = context;
         }
 
 		public IActionResult OnGet(
@@ -34,7 +30,8 @@ namespace Shop.UI.Pages.Checkout
 
         public async Task<IActionResult> OnPost(
             string stripeEmail, string stripeToken,
-            [FromServices] GetOrderCart getOrder) {
+            [FromServices] GetOrderCart getOrder,
+            [FromServices] CreateOrder createOrder) {
 
             var customers = new CustomerService();
             var charges = new ChargeService();
@@ -55,7 +52,7 @@ namespace Shop.UI.Pages.Checkout
 
             var sessionId = HttpContext.Session.Id;
 
-            await new CreateOrder(_context).Do(new CreateOrder.Request {
+            await createOrder.Do(new CreateOrder.Request {
                 StripeReference = charge.Id,
                 SessionId = sessionId,
 

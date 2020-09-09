@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shop.Database;
+﻿using Shop.Domain.Infrastructure;
+using Shop.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +8,10 @@ namespace Shop.Application.OrdersAdmin
 {
 	public class GetOrder
 	{
-		private ApplicationDbContext _context;
+		private IOrderManager _orderManager;
 
-		public GetOrder(ApplicationDbContext context) {
-			_context = context;
+		public GetOrder(IOrderManager orderManager) {
+			_orderManager = orderManager;
 		}
 
 		public class Response
@@ -41,32 +41,29 @@ namespace Shop.Application.OrdersAdmin
 		}
 
 		public Response Do(Guid id) =>
-			_context.Orders
-				.Where(x => x.Id == id)
-				.Include(x => x.OrderStocks)
-				.ThenInclude(x => x.Stock)
-				.ThenInclude(x => x.Product)
-				.Select(x => new Response {
-					Id = x.Id,
-					OrderRef = x.OrderRef,
-					StripeReference = x.StripeReference,
+			_orderManager.GetOrderById(id, Projection);
 
-					FirstName = x.FirstName,
-					LastName = x.LastName,
-					Email = x.Email,
-					PhoneNumber = x.PhoneNumber,
-					Address1 = x.Address1,
-					Address2 = x.Address2,
-					City = x.City,
-					PostCode = x.PostCode,
+		private static Func<Order, Response> Projection = (order) =>
+			new Response {
+				Id = order.Id,
+				OrderRef = order.OrderRef,
+				StripeReference = order.StripeReference,
 
-					Products = x.OrderStocks.Select(y => new Product {
-						Name = y.Stock.Product.Name,
-						Description = y.Stock.Product.Description,
-						Quantity = y.Quantity,
-						StockDescription = y.Stock.Description
-					})
+				FirstName = order.FirstName,
+				LastName = order.LastName,
+				Email = order.Email,
+				PhoneNumber = order.PhoneNumber,
+				Address1 = order.Address1,
+				Address2 = order.Address2,
+				City = order.City,
+				PostCode = order.PostCode,
+
+				Products = order.OrderStocks.Select(y => new Product {
+					Name = y.Stock.Product.Name,
+					Description = y.Stock.Product.Description,
+					Quantity = y.Quantity,
+					StockDescription = y.Stock.Description
 				})
-			.FirstOrDefault();
+			};
 	}
 }

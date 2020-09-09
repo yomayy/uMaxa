@@ -1,4 +1,4 @@
-﻿using Shop.Database;
+﻿using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -9,10 +9,14 @@ namespace Shop.Application.Orders
 {
 	public class CreateOrder
 	{
-		private ApplicationDbContext _context;
+		private IOrderManager _orderManager;
+		private IStockManager _stockManager;
 
-		public CreateOrder(ApplicationDbContext context) {
-			_context = context;
+		public CreateOrder(
+				IOrderManager orderManager,
+				IStockManager stockManager) {
+			_orderManager = orderManager;
+			_stockManager = stockManager;
 		}
 
 		public class Request
@@ -39,13 +43,6 @@ namespace Shop.Application.Orders
 		}
 
 		public async Task<bool> Do(Request request) {
-
-			var stockOnHold = _context.StocksOnHold
-				?.Where(x => x.SessionId == request.SessionId)
-				?.ToList();
-
-			_context.StocksOnHold.RemoveRange(stockOnHold);
-
 			var order = new Order {
 				OrderRef = CreateOrderReference(),
 				StripeReference = request.StripeReference,
@@ -62,8 +59,14 @@ namespace Shop.Application.Orders
 					Quantity = x.Quantity
 				}).ToList()
 			};
-			_context.Orders.Add(order);
-			return await _context.SaveChangesAsync() > 0;
+
+			var success = await _orderManager.CreateOrder(order) > 0;
+
+			if (success) {
+				await _stockManager.RemoveStockFromHold(request.SessionId);
+				return true;
+			}
+			return false;
 		}
 
 		public string CreateOrderReference() {
@@ -74,8 +77,8 @@ namespace Shop.Application.Orders
 				for (int i = 0; i < stringChars.Length; i++) {
 					stringChars[i] = chars[random.Next(chars.Length)];
 				}
-			} while (_context.Orders.Any(x => x.OrderRef == new string(stringChars)));
-			var finalString = new String(stringChars);
+			} while (_orderManager.OrderReferenceExists(new string(stringChars)));
+			var finalString = new string(stringChars);
 			return finalString;
 		}
 	}

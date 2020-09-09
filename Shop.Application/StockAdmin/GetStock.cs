@@ -1,6 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shop.Database;
-using Shop.Domain.BaseModels;
+﻿using Shop.Domain.BaseModels;
+using Shop.Domain.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +8,26 @@ namespace Shop.Application.StockAdmin
 {
 	public class GetStock
 	{
-		private ApplicationDbContext _context;
+		private IProductManager _productManager;
 
-		public GetStock(ApplicationDbContext context) {
-			_context = context;
+		public GetStock(IProductManager productManager) {
+			_productManager = productManager;
 		}
 
 		public IEnumerable<ProductViewModel> Do() {
-			var stock = _context?.Products
-				?.Include(x => x.Stocks)
-				?.Select(x => new ProductViewModel {
+			return _productManager.GetProductsWithStock(x => 
+				new ProductViewModel {
 					Id = x.Id,
 					Description = x.Description,
 					Stocks = x.Stocks
-					.Select(y => new StockViewModel {
-						Id = y.Id,
-						Description = y.Description,
-						Quantity = y.Quantity,
-						CreatedOn = y.CreatedOn,
-						ModifiedOn = y.ModifiedOn
-					})
-				})
-				?.ToList();
-			return stock;
+						.Select(y => new StockViewModel {
+							Id = y.Id,
+							Description = y.Description,
+							Quantity = y.Quantity,
+							CreatedOn = y.CreatedOn,
+							ModifiedOn = y.ModifiedOn
+						})
+				});
 		}
 
 		public class StockViewModel : DbBase

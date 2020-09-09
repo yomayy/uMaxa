@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Shop.Database;
+﻿using Shop.Domain.Infrastructure;
+using Shop.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,10 +8,10 @@ namespace Shop.Application.Orders
 {
 	public class GetOrder
 	{
-		private ApplicationDbContext _context;
+		private readonly IOrderManager _orderManager;
 
-		public GetOrder(ApplicationDbContext context) {
-			_context = context;
+		public GetOrder(IOrderManager orderManager) {
+			_orderManager = orderManager;
 		}
 
 		public class Response
@@ -40,33 +41,30 @@ namespace Shop.Application.Orders
 		}
 
 		public Response Do(string reference) {
-			return _context.Orders
-				.Where(x => x.OrderRef == reference)
-				.Include(x => x.OrderStocks)
-				.ThenInclude(x => x.Stock)
-				.ThenInclude(x => x.Product)
-				.Select(x => new Response {
-					OrderRef = x.OrderRef,
-					FirstName = x.FirstName,
-					LastName = x.LastName,
-					Email = x.Email,
-					PhoneNumber = x.PhoneNumber,
-					Address1 = x.Address1,
-					Address2 = x.Address2,
-					City = x.City,
-					PostCode = x.PostCode,
-
-					Products = x.OrderStocks.Select(y => new Product {
-						Name = y.Stock.Product.Name,
-						Description = y.Stock.Product.Description,
-						Value = $"{y.Stock.Product.Value.ToString("N2")} $",
-						Quantity = y.Quantity,
-						StockDescription = y.Stock.Description,
-					}),
-
-					TotalValue = x.OrderStocks.Sum(y => y.Stock.Product.Value).ToString("N2")
-				})
-				.FirstOrDefault();
+			return _orderManager.GetOrderByReference(reference, Projection);
 		}
+
+		private static Func<Order, Response> Projection = (order) =>
+			new Response {
+				OrderRef = order.OrderRef,
+				FirstName = order.FirstName,
+				LastName = order.LastName,
+				Email = order.Email,
+				PhoneNumber = order.PhoneNumber,
+				Address1 = order.Address1,
+				Address2 = order.Address2,
+				City = order.City,
+				PostCode = order.PostCode,
+
+				Products = order.OrderStocks.Select(y => new Product {
+					Name = y.Stock.Product.Name,
+					Description = y.Stock.Product.Description,
+					Value = $"{y.Stock.Product.Value.ToString("N2")} $",
+					Quantity = y.Quantity,
+					StockDescription = y.Stock.Description,
+				}),
+
+				TotalValue = order.OrderStocks.Sum(y => y.Stock.Product.Value).ToString("N2")
+			};
 	}
 }

@@ -1,5 +1,5 @@
-﻿using Shop.Database;
-using Shop.Domain.BaseModels;
+﻿using Shop.Domain.BaseModels;
+using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -9,18 +9,18 @@ namespace Shop.Application.StockAdmin
 {
 	public class UpdateStock
 	{
-		private ApplicationDbContext _context;
+		private IStockManager _stockManager;
 
-		public UpdateStock(ApplicationDbContext context) {
-			_context = context;
+		public UpdateStock(IStockManager stockManager) {
+			_stockManager = stockManager;
 		}
 
 		public async Task<Response> Do(Request request) {
 
-			var stocks = new List<Stock>();
+			var stockList = new List<Stock>();
 
 			foreach (var stock in request?.Stocks) {
-				stocks.Add(new Stock {
+				stockList.Add(new Stock {
 					Id = stock.Id,
 					Description = stock?.Description,
 					Quantity = stock.Quantity,
@@ -30,8 +30,7 @@ namespace Shop.Application.StockAdmin
 				});
 			}
 
-			_context.Stocks.UpdateRange(stocks);
-			await _context.SaveChangesAsync();
+			await _stockManager.UpdateStockRange(stockList);
 
 			return new Response {
 				Stocks = request?.Stocks

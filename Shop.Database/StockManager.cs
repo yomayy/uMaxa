@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop.Database;
+using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +15,22 @@ namespace Shop.Application.Cart
 
 		public StockManager(ApplicationDbContext context) {
 			_context = context;
+		}
+
+		public Task<int> CreateStock(Stock stock) {
+			_context.Stocks.Add(stock);
+			return _context.SaveChangesAsync();
+		}
+
+		public Task<int> DeleteStock(Guid id) {
+			var stock = _context?.Stocks.FirstOrDefault(x => x.Id == id);
+			_context?.Stocks.Remove(stock);
+			return _context.SaveChangesAsync();
+		}
+
+		public Task<int> UpdateStockRange(List<Stock> stockList) {
+			_context.Stocks.UpdateRange(stockList);
+			return _context.SaveChangesAsync();
 		}
 
 		public bool EnoughStock(Guid stockId, int quantity) {
@@ -63,6 +81,15 @@ namespace Shop.Application.Cart
 			return _context.SaveChangesAsync();
 		}
 
+		public Task RemoveStockFromHold(string sessionId) {
+			var stockOnHold = _context.StocksOnHold
+				?.Where(x => x.SessionId == sessionId)
+				?.ToList();
+			_context.StocksOnHold.RemoveRange(stockOnHold);
+
+			return _context.SaveChangesAsync();
+		}
+
 		public Task RemoveStockFromHold(Guid stockId, int quantity, string sessionId) {
 			var stockOnHold = _context.StocksOnHold
 				.FirstOrDefault(x => x.StockId == stockId
@@ -76,6 +103,24 @@ namespace Shop.Application.Cart
 				_context.Remove(stockOnHold);
 			}
 			return _context.SaveChangesAsync();
+		}
+
+		public Task RetrieveExpiredStockOnHold() {
+			var stocksOnHold = _context.StocksOnHold
+				.Where(x => x.ExpiryDate < DateTime.UtcNow)
+				.ToList();
+			if (stocksOnHold.Count > 0) {
+				var stockToReturn = _context.Stocks
+					.Where(x => stocksOnHold.Any(y => y.StockId == x.Id))
+					.ToList();
+				foreach (var stock in stockToReturn) {
+					stock.Quantity = stock.Quantity +
+						stocksOnHold.FirstOrDefault(x => x.StockId == stock.Id).Quantity;
+				}
+				_context.StocksOnHold.RemoveRange(stocksOnHold);
+				return _context.SaveChangesAsync();
+			}
+			return Task.CompletedTask;
 		}
 	}
 }
