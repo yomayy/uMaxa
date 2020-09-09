@@ -3,6 +3,7 @@ using System;
 
 namespace Shop.Application.ProductsAdmin
 {
+	[Service]
 	public class GetProduct
 	{
 		private IProductManager _productManager;

@@ -1,9 +1,9 @@
-﻿using Shop.Application.Cart;
-using Shop.Application.Orders;
-using Shop.Application.OrdersAdmin;
-using Shop.Application.ProductsAdmin;
-using Shop.Application.StockAdmin;
-using Shop.Application.UsersAdmin;
+﻿using Shop.Application;
+using Shop.Database;
+using Shop.Domain.Infrastructure;
+using Shop.UI.Infrastructure;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -11,6 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
 	{
 		public static IServiceCollection AddApplicationServices(this IServiceCollection @this) {
 
+			{
+			/*
 			#region Cart
 			@this.AddTransient<AddCustomerInformation>();
 			@this.AddTransient<AddToCart>();
@@ -54,6 +56,23 @@ namespace Microsoft.Extensions.DependencyInjection
 			#region UsersAdmin
 			@this.AddTransient<CreateUser>();
 			#endregion
+			*/
+			}
+
+			var serviceType = typeof(Service);
+			var definedTypes = serviceType.Assembly.DefinedTypes;
+
+			var services = definedTypes
+				.Where(x => x.GetTypeInfo().GetCustomAttribute<Service>() != null);
+
+			foreach (var service in services) {
+				@this.AddTransient(service);
+			}
+
+			@this.AddTransient<IStockManager, StockManager>();
+			@this.AddTransient<IProductManager, ProductManager>();
+			@this.AddTransient<IOrderManager, OrderManager>();
+			@this.AddScoped<ISessionManager, SessionManager>();
 
 			return @this;
 		}

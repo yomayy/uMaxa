@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shop.Database;
 using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Shop.Application.Cart
+namespace Shop.Database
 {
 	public class StockManager : IStockManager
 	{

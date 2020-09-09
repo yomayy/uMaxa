@@ -10,6 +10,7 @@ namespace Shop.Domain.Infrastructure
 		void AddProduct(CartProduct cartProduct);
 		void RemoveProduct(Guid stockId, int quantity);
 		IEnumerable<TResult> GetCart<TResult>(Func<CartProduct, TResult> selector);
+		void ClearCart();
 
 		void AddCustomerInformation(CustomerInformation customer);
 		CustomerInformation GetCustomerInformation();

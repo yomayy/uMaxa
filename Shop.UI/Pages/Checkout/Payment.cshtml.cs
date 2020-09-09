@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Shop.Application.Cart;
 using Shop.Application.Orders;
+using Shop.Domain.Infrastructure;
 using Stripe;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +32,8 @@ namespace Shop.UI.Pages.Checkout
         public async Task<IActionResult> OnPost(
             string stripeEmail, string stripeToken,
             [FromServices] GetOrderCart getOrder,
-            [FromServices] CreateOrder createOrder) {
+            [FromServices] CreateOrder createOrder,
+            [FromServices] ISessionManager sessionManager) {
 
             var customers = new CustomerService();
             var charges = new ChargeService();
@@ -69,6 +71,8 @@ namespace Shop.UI.Pages.Checkout
                     Quantity = x.Quantity
 				}).ToList()
             });
+
+            sessionManager.ClearCart();
 
             return RedirectToPage("/Index");
 		}

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Shop.Application.Cart
 {
+	[Service]
 	public class GetCart
 	{
 		private ISessionManager _sessionManager;
