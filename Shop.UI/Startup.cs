@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shop.Application.Cart;
 using Shop.Database;
+using Shop.UI.ValidationContexts;
 using Stripe;
 using System;
 
@@ -60,7 +64,8 @@ namespace Shop.UI
 					options.Conventions.AuthorizeFolder("/Admin");
 					options.Conventions.AuthorizePage("/Admin/ConfigureUsers", "Admin");
 				})
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddFluentValidation(x => x.RegisterValidatorsFromAssembly(typeof(Startup).Assembly));
 
 			services.AddSession(options => {
 				options.Cookie.Name = "Cart";
