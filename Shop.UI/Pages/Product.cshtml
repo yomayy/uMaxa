@@ -21,7 +21,9 @@
 						</p>
 						<footer>
 							<form method="post">
-
+								@{
+									bool outOfStock = true;
+								}
 								<div class="field is-horizontal">
 									<div class="field-label is-normal">
 										<label class="label">Size</label>
@@ -34,7 +36,7 @@
 														@foreach (var s in Model.Product.Stocks) {
 
 															bool disabled = s.Quantity <= 0;
-
+															outOfStock = disabled;
 															<option value="@s.Id" disabled="@disabled">@s.Description</option>
 														}
 													</select>
@@ -51,7 +53,7 @@
 									<div class="field-body">
 										<div class="field is-narrow">
 											<div class="control">
-												<input class="input" asp-for="CartViewModel.Quantity" value="0" />
+												<input class="input" asp-for="CartViewModel.Quantity" value="1" min="1"/>
 											</div>
 											@foreach (var stock in Model?.Product?.Stocks) {
 												if(stock.Quantity <= 10) {
@@ -70,7 +72,7 @@
 									<div class="field-body">
 										<div class="field is-narrow">
 											<div class="control">
-												<button class="button is-success" type="submit">Submit</button>
+												<button class="button is-success" type="submit" disabled="@outOfStock">Submit</button>
 											</div>
 										</div>
 									</div>
