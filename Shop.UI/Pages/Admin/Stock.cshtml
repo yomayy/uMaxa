@@ -6,11 +6,15 @@
 <div id="app">
 	<div class="columns">
 		<div class="column is-3">
+			<div class="table-container">
 			<table class="table">
 				<tr v-for="product in products" @@click="selectProduct(product)">
-					<td>{{product.description}}</td>
+					<td>
+						<strong>{{product.productName}}</strong><br/><small>{{product.description}}</small>
+					</td>
 				</tr>
 			</table>
+			</div>
 		</div>
 		<div class="column is-6" v-if="selectedProduct">
 			<table class="table">

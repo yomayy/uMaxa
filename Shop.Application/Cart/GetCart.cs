@@ -20,6 +20,7 @@ namespace Shop.Application.Cart
 			public decimal RealValue { get; set; }
 			public int Quantity { get; set; }
 			public Guid StockId { get; set; }
+			public string StockDescription { get; set; }
 		}
 
 		public IEnumerable<Response> Do() {
@@ -30,6 +31,7 @@ namespace Shop.Application.Cart
 					Value = x.Value.GetValueString(),
 					RealValue = x.Value,
 					StockId = x.StockId,
+					StockDescription = x.StockDescription,
 					Quantity = x.Quantity
 				});
 		}

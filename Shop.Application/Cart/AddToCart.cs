@@ -39,6 +39,7 @@ namespace Shop.Application.Cart
 				ProductId = stock.ProductId,
 				ProductName = stock.Product.Name,
 				StockId = stock.Id,
+				StockDescription = stock.Description,
 				Quantity = request.Quantity,
 				Value = stock.Product.Value
 			};
