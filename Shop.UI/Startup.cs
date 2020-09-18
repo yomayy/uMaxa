@@ -32,7 +32,7 @@ namespace Shop.UI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["DefaultConnection"]));
+			services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["ProdConnection"]));
 
 			services.AddIdentity<IdentityUser, IdentityRole>(options => {
 				options.Password.RequireDigit = false;

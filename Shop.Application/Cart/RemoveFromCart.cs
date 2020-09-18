@@ -23,7 +23,7 @@ namespace Shop.Application.Cart
 			public int Quantity { get; set; }
 		}
 
-		public async Task<bool> Do(Request request) {
+		public async Task<bool> DoAsync(Request request) {
 			if(request.Quantity <= 0) {
 				return false;
 			}

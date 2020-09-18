@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Domain.BaseModels
 {
-	public class DbBase
+	public abstract class DbBase
 	{
 		/// <summary>
 		/// Id

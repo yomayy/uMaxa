@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+		<AllowUntrustedCertificate>True</AllowUntrustedCertificate>
+		<UserSecretsId>72f3076d-7c81-48f8-93b0-6b633c4f55ee</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

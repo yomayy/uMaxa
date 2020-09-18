@@ -43,7 +43,7 @@ namespace Shop.Application.Orders
 			public int Quantity { get; set; }
 		}
 
-		public async Task<bool> Do(Request request) {
+		public async Task<bool> DoAsync(Request request) {
 			var order = new Order {
 				OrderRef = CreateOrderReference(),
 				StripeReference = request.StripeReference,
@@ -70,7 +70,7 @@ namespace Shop.Application.Orders
 			return false;
 		}
 
-		public string CreateOrderReference() {
+		private string CreateOrderReference() {
 			var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 			var stringChars = new char[12];
 			var random = new Random();

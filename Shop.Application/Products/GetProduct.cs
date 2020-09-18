@@ -20,7 +20,7 @@ namespace Shop.Application.Products
 			_productManager = productManager;
 		}
 
-		public async Task<ProductViewModel> Do(string name) {
+		public async Task<ProductViewModel> DoAsync(string name) {
 
 			await _stockManager.RetrieveExpiredStockOnHold();
 

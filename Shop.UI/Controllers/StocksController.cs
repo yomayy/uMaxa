@@ -18,18 +18,18 @@ namespace Shop.UI.Controllers
 		public async Task<IActionResult> CreateStocks(
 				[FromBody] CreateStock.Request request,
 				[FromServices] CreateStock createStock) => 
-			Ok((await createStock.Do(request)));
+			Ok((await createStock.DoAsync(request)));
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteStocks(
 				Guid id,
 				[FromServices] DeleteStock deleteStock) => 
-			Ok((await deleteStock.Do(id)));
+			Ok((await deleteStock.DoAsync(id)));
 
 		[HttpPut("")]
 		public async Task<IActionResult> UpdateStocks(
 				[FromBody] UpdateStock.Request request,
 				[FromServices] UpdateStock updateStock) => 
-			Ok((await updateStock.Do(request)));
+			Ok((await updateStock.DoAsync(request)));
 	}
 }

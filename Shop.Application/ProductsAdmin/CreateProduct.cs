@@ -14,7 +14,7 @@ namespace Shop.Application.ProductsAdmin
 			_productManager = productManager;
 		}
 
-		public async Task<Response> Do(Request request) {
+		public async Task<Response> DoAsync(Request request) {
 			var product = new Product {
 				Name = request?.Name,
 				Description = request?.Description,

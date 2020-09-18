@@ -24,19 +24,19 @@ namespace Shop.UI.Controllers
 		public async Task<IActionResult> CreateProduct(
 				[FromBody] CreateProduct.Request request,
 				[FromServices] CreateProduct createProduct) => 
-			Ok((await createProduct.Do(request)));
+			Ok((await createProduct.DoAsync(request)));
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteProduct(
 				Guid id,
 				[FromServices] DeleteProduct deleteProduct) => 
-			Ok((await deleteProduct.Do(id)));
+			Ok((await deleteProduct.DoAsync(id)));
 
 		[HttpPut("")]
 		public async Task<IActionResult> UpdateProduct(
 				[FromBody] UpdateProduct.Request request,
 				[FromServices] UpdateProduct updateProduct) => 
-			Ok((await updateProduct.Do(request)));
+			Ok((await updateProduct.DoAsync(request)));
 
 	}
 }

@@ -5,8 +5,8 @@
 
 <div id="app" class="container">
 	<div v-if="!editing">
-		<button class="button" @@click="newProduct">Add new product</button>
-		<table class="table">
+		<button class="button is-success" @@click="newProduct">Add new product</button>
+		<table class="table is-hoverable">
 			<tr>
 				<th>Id</th>
 				<th>Product</th>
@@ -18,8 +18,8 @@
 				<td>{{product.id}}</td>
 				<td>{{product.name}}</td>
 				<td>{{product.value}}</td>
-				<td><a @@click="editProduct(product.id, index)">Edit</a></td>
-				<td><a @@click="deleteProduct(product.id, index)">Remove</a></td>
+				<td><a class="button has-text-warning-dark" @@click="editProduct(product.id, index)">Edit</a></td>
+				<td><a class="button has-text-danger-dark" @@click="deleteProduct(product.id, index)">Remove</a></td>
 			</tr>
 		</table>
 	</div>

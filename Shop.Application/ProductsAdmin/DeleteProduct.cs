@@ -13,7 +13,7 @@ namespace Shop.Application.ProductsAdmin
 			_productManager = productManager;
 		}
 
-		public Task<int> Do(Guid id) {
+		public Task<int> DoAsync(Guid id) {
 			return _productManager.DeleteProduct(id);
 		}
 	}

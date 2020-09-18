@@ -54,7 +54,7 @@ namespace Shop.UI.Pages.Checkout
 
             var sessionId = HttpContext.Session.Id;
 
-            await createOrder.Do(new CreateOrder.Request {
+            await createOrder.DoAsync(new CreateOrder.Request {
                 StripeReference = charge.Id,
                 SessionId = sessionId,
 

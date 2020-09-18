@@ -4,8 +4,54 @@
 }
 
 <div id="app" class="container">
-	<input v-model="username" />
-	<button @@click="createUser()">Create</button>
+	<div class="columns">
+		<div class="column is-4">
+			<h1 class="title">Users:</h1>
+			<div class="table-container">
+				<table class="table is-hoverable">
+					<thead>
+						<tr>
+							<th>User Name</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(user, index) in users">
+							<td @@click="selectUser(user, index)">{{user.userName}}</td>
+							<td>
+								<a v-if="selectedUser && index == selectedIndex"
+								   class="has-text-danger button"
+								   @@click="deleteUser(selectedUser.id, index)">
+									Delete
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="column is-4" v-if="selectedUser">
+			<label class="label">Update</label>
+			<div class="field">
+				<div class="control">
+					<input class="input" v-model="selectedUser.userName" />
+				</div>
+			</div>
+			<button class="button is-warning" @@click="updateUser">
+				Update User
+			</button>
+		</div>
+		<div class="column is-4">
+			<div class="field">
+				<label class="label">User Name</label>
+				<div class="control">
+					<input class="input" v-model="username" />
+				</div>
+			</div>
+			<button class="button is-success" @@click="createUser()">Create</button>
+		</div>
+	</div>
 </div>
 
 

@@ -16,7 +16,7 @@ namespace Shop.Application.StockAdmin
 			_stockManager = stockManager;
 		}
 
-		public async Task<Response> Do(Request request) {
+		public async Task<Response> DoAsync(Request request) {
 
 			var stockList = new List<Stock>();
 

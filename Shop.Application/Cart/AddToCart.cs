@@ -24,7 +24,7 @@ namespace Shop.Application.Cart
 			public int Quantity { get; set; }
 		}
 
-		public async Task<bool> Do(Request request) {
+		public async Task<bool> DoAsync(Request request) {
 			// service responsibility
 			if(!_stockManager.EnoughStock(request.StockId, request.Quantity)) {
 				return false;

@@ -13,7 +13,7 @@ namespace Shop.Application.StockAdmin
 			_stockManager = stockManager;
 		}
 
-		public Task<int> Do(Guid id) {
+		public Task<int> DoAsync(Guid id) {
 			return _stockManager.DeleteStock(id);
 		}
 	}

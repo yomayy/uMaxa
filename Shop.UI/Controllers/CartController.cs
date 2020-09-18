@@ -18,7 +18,7 @@ namespace Shop.UI.Controllers
 				Quantity = 1
 			};
 
-			var success = await addToCart.Do(request);
+			var success = await addToCart.DoAsync(request);
 			if (success) {
 				return Ok("Item added to cart");
 			}
@@ -35,7 +35,7 @@ namespace Shop.UI.Controllers
 				Quantity = quantity
 			};
 
-			var success = await removeFromCart.Do(request);
+			var success = await removeFromCart.DoAsync(request);
 			if (success) {
 				return Ok("Item removed from cart");
 			}
