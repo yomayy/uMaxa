@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Shop.Application;
 using System.Threading.Tasks;
 
 namespace Shop.UI.Pages.Account
@@ -20,7 +21,12 @@ namespace Shop.UI.Pages.Account
         }
 
         public async Task<IActionResult> OnPost() {
-            var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, false, false);
+
+			if (!ModelState.IsValid) {
+				return Page();
+			}
+
+			var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, false, false);
 
 			if (result.Succeeded) {
 				return RedirectToPage("/Admin/Index");
@@ -31,6 +37,8 @@ namespace Shop.UI.Pages.Account
 		}
 
     }
+
+	[Service]
     public class LoginViewModel
 	{
 		public string Username { get; set; }

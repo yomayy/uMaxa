@@ -3,8 +3,30 @@
 @{
 }
 
-<form method="post">
-	<input asp-for="Input.Username"/>
-	<input asp-for="Input.Password"/>
-	<input type="submit" name="name" value="Sign In" />
-</form>
+<div class="container is-centered columns">
+	<div class="column is-4">
+
+	</div>
+	<div class="column is-4">
+		<form method="post">
+			<div class="field">
+				<input class="input" asp-for="Input.Username"
+					   type="text" placeholder="Username" style="max-width: 200px">
+				<span class="help is-danger" asp-validation-for="Input.Username"></span>
+			</div>
+			<div class="field">
+				<input class="input" asp-for="Input.Password"
+					   type="password" placeholder="Password" style="max-width: 200px">
+				<span class="help is-danger" asp-validation-for="Input.Password"></span>
+			</div>
+			<div class="field">
+				<p class="control">
+					<input class="button is-primary" type="submit" name="name" value="Sign In" />
+				</p>
+			</div>
+		</form>
+	</div>
+	<div class="column is-4">
+
+	</div>
+</div>

@@ -34,7 +34,7 @@ namespace Shop.UI.Pages
 			}
 			else {
                 // TODO: add a warning
-                return Page();
+                return RedirectToPage("Error");
 			}
 		}
     }
