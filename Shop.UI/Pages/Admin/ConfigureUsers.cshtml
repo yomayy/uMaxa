@@ -20,7 +20,7 @@
 						<tr v-for="(user, index) in users">
 							<td @@click="selectUser(user, index)">{{user.userName}}</td>
 							<td>
-								<a v-if="selectedUser && index == selectedIndex"
+								<a v-if="selectedUser && index == selectedIndex && !checkAdmin(user)"
 								   class="has-text-danger button"
 								   @@click="deleteUser(selectedUser.id, index)">
 									Delete

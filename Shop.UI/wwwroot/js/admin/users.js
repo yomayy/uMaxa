@@ -4,6 +4,7 @@
 		editing: false,
 		loading: false,
 		username: "",
+		isAdmin: false,
 		selectedUser: null,
 		selectedIndex: 0,
 		users: []
@@ -73,6 +74,14 @@
 		selectUser(user, index) {
 			this.selectedUser = user;
 			this.selectedIndex = index;
+		},
+		checkAdmin(user) {
+			if (user.userName == 'Admin'
+				|| user.userName == 'Manager') {
+				return true;
+			} else {
+				return false;
+			}
 		},
 		cancel() {
 			this.editing = false;
