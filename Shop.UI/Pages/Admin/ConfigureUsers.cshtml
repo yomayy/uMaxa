@@ -31,7 +31,7 @@
 				</table>
 			</div>
 		</div>
-		<div class="column is-4" v-if="selectedUser">
+		<div class="column is-4" v-if="selectedUser && !isAdmin">
 			<label class="label">Update</label>
 			<div class="field">
 				<div class="control">

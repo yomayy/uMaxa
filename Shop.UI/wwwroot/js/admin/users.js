@@ -74,10 +74,17 @@
 		selectUser(user, index) {
 			this.selectedUser = user;
 			this.selectedIndex = index;
+			if (user.userName == 'Admin'
+				|| user.userName == 'Manager') {
+				this.isAdmin = true;
+			} else {
+				this.isAdmin = false;
+			}
 		},
 		checkAdmin(user) {
 			if (user.userName == 'Admin'
 				|| user.userName == 'Manager') {
+				this.isAdmin = true;
 				return true;
 			} else {
 				return false;
