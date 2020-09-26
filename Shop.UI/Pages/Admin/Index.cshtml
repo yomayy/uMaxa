@@ -8,15 +8,15 @@
 		<button class="button is-success" @@click="newProduct">Add new product</button>
 		<table class="table is-hoverable">
 			<tr>
-				<th>Id</th>
 				<th>Product</th>
+				<th>Description</th>
 				<th>Value</th>
 				<th></th>
 				<th></th>
 			</tr>
 			<tr v-for="(product, index) in products">
-				<td>{{product.id}}</td>
 				<td>{{product.name}}</td>
+				<td>{{product.description}}</td>
 				<td>{{product.value}}</td>
 				<td><a class="button has-text-warning-dark" @@click="editProduct(product.id, index)">Edit</a></td>
 				<td><a class="button has-text-danger-dark" @@click="deleteProduct(product.id, index)">Remove</a></td>

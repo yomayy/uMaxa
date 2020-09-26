@@ -23,6 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
 			@this.AddTransient<IStockManager, StockManager>();
 			@this.AddTransient<IProductManager, ProductManager>();
 			@this.AddTransient<IOrderManager, OrderManager>();
+			@this.AddTransient<ICategoryManager, CategoryManager>();
 			@this.AddScoped<ISessionManager, SessionManager>();
 
 			return @this;

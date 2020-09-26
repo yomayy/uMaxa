@@ -1,0 +1,68 @@
+﻿@page
+@model Shop.UI.Pages.Admin.CategoryModel
+@{
+}
+
+<div id="app" class="container">
+	<div class="columns">
+		<div class="column is-6">
+			<div v-if="!editing">
+				<button class="button is-success" @@click="newCategory">Add new category</button>
+				<table class="table is-hoverable">
+					<tr>
+						<th>Category</th>
+						<th>Description</th>
+						<th></th>
+						<th></th>
+					</tr>
+					<tr v-for="(category, index) in categories" @@click="selectCategory(category)">
+						<td>{{category.name}}</td>
+						<td>{{category.description}}</td>
+						<td><a class="button has-text-warning-dark" @@click="editCategory(category.id, index)">Edit</a></td>
+						<td><a class="button has-text-danger-dark" @@click="deleteCategory(category.id, index)">Remove</a></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="column is-6" v-if="selectedCategory && selectedCategory.products.length > 0">
+			<button class="button is-success" @@click="newProduct">Add new product</button>
+			<table class="table is-hoverable">
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+				</tr>
+				<tr v-for="(product, index) in selectedCategory.products">
+					<td><input class="input" v-model="product.name" /></td>
+					<td><input class="input" v-model="product.description" /></td>
+					@*<td><a class="has-text-danger" @@click="deleteProduct(product.id, index)">Delete</a></td>*@
+				</tr>
+			</table>
+			@*<a class="button is-warning" @@click="updateProduct">
+				Update Products
+			</a>*@
+		</div>
+	</div>
+
+	<div v-else>
+		<div class="field">
+			<label class="label">Category Name</label>
+			<div class="control">
+				<input class="input" v-model="categoryModel.name" />
+			</div>
+		</div>
+		<div class="field">
+			<label class="label">Category Description</label>
+			<div class="control">
+				<input class="input" v-model="categoryModel.description" />
+			</div>
+		</div>
+		<button class="button is-success" @@click="createCategory" v-if="!categoryModel.id">Create Category</button>
+		<button class="button is-warning" @@click="updateCategory" v-else="">Update Category</button>
+		<button class="button" @@click="cancel">Cancel</button>
+	</div>
+</div>
+
+
+@section scripts {
+	<script src="~/js/admin/category.js"></script>>
+}
