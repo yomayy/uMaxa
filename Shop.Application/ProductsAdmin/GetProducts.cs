@@ -20,7 +20,7 @@ namespace Shop.Application.ProductsAdmin
 				Name = p.Name,
 				Description = p.Description,
 				Value = p.Value,
-				//CategoryId = p?.CategoryId
+				Image = p?.ProductImage,
 				Category = new CategoryViewModel {
 					Id = p?.Category?.Id,
 					Name = p?.Category?.Name
@@ -35,7 +35,7 @@ namespace Shop.Application.ProductsAdmin
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
-			//public Guid? CategoryId { get; set; }
+			public string Image { get; set; }
 			public CategoryViewModel Category { get; set; } = null;
 		}
 

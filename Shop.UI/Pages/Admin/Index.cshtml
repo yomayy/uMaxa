@@ -6,25 +6,37 @@
 <div id="app" class="container">
 	<div v-if="!editing">
 		<button class="button is-success" @@click="newProduct">Add new product</button>
-		<table class="table is-hoverable">
-			<tr>
-				<th>Product</th>
-				<th>Description</th>
-				<th>Value</th>
-				<th>Category</th>
-				<th></th>
-				<th></th>
-			</tr>
-			<tr v-for="(product, index) in products">
-				<td>{{product.name}}</td>
-				<td>{{product.description}}</td>
-				<td>{{product.value}}</td>
-				<td v-if="product.category.name" style="text-align: center">{{product.category.name}}</td>
-				<td v-else="product.category.name" style="text-align: center">---</td>
-				<td><a class="button has-text-warning-dark" @@click="editProduct(product.id, index)">Edit</a></td>
-				<td><a class="button has-text-danger-dark" @@click="deleteProduct(product.id, index)">Remove</a></td>
-			</tr>
-		</table>
+		<div class="table-container">
+			<table class="table is-hoverable">
+				<tr>
+					<th>Product</th>
+					<th>Description</th>
+					<th>Value</th>
+					<th>Category</th>
+					<th>Image</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr v-for="(product, index) in products">
+					<td>{{product.name}}</td>
+					<td>{{product.description}}</td>
+					<td>{{product.value}}</td>
+					<td v-if="product.category.name" style="text-align: center">{{product.category.name}}</td>
+					<td v-else="product.category.name" style="text-align: center">---</td>
+					<td>
+						<article class="media">
+							<figure class="media-left">
+								<p class="image is-128x128">
+									<img class="image is-128x128" :src="product.image" />
+								</p>
+							</figure>
+						</article>
+					</td>
+					<td><a class="button has-text-warning-dark" @@click="editProduct(product.id, index)">Edit</a></td>
+					<td><a class="button has-text-danger-dark" @@click="deleteProduct(product.id, index)">Remove</a></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 
 	<div v-else>
@@ -59,13 +71,12 @@
 				</select>
 			</div>
 		</div>
-		@*<div class="field">
+		<div class="field">
 			<label class="label">Image</label>
 			<div class="control">
-				<input type="file" @@change="onFileSelected" />
-				<button @@click="onUpload">Upload</button>
+				<input type="file" class="input" @@change="onFileSelected" />
 			</div>
-		</div>*@
+		</div>
 		<button class="button is-success" 
 				@@click="createProduct" 
 				v-if="!productModel.id">Create Product</button>

@@ -17,6 +17,7 @@ namespace Shop.Application.Cart
 		{
 			public string Name { get; set; }
 			public string Value { get; set; }
+			public string ProductImage { get; set; }
 			public decimal RealValue { get; set; }
 			public int Quantity { get; set; }
 			public Guid StockId { get; set; }
@@ -28,6 +29,7 @@ namespace Shop.Application.Cart
 			return _sessionManager
 				.GetCart(x => new Response {
 					Name = x.ProductName,
+					ProductImage = x?.ProductImage,
 					Value = x.Value.GetValueString(),
 					RealValue = x.Value,
 					StockId = x.StockId,

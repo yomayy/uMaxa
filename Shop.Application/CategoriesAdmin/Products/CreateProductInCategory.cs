@@ -20,7 +20,8 @@ namespace Shop.Application.CategoriesAdmin.Products
 				Name = request?.Name,
 				Description = request?.Description,
 				Value = request.Value,
-				CategoryId = request?.CategoryId
+				CategoryId = request?.CategoryId,
+				ProductImage = request?.Image
 			};
 			await _productManager.CreateProduct(product);
 			return new Response {
@@ -30,6 +31,7 @@ namespace Shop.Application.CategoriesAdmin.Products
 				Name = product?.Name,
 				Description = product?.Description,
 				Value = product.Value,
+				Image = product?.ProductImage,
 				CategoryId = product?.CategoryId
 			};
 		}
@@ -39,6 +41,7 @@ namespace Shop.Application.CategoriesAdmin.Products
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
+			public string Image { get; set; }
 			public Guid? CategoryId { get; set; }
 		}
 
@@ -47,6 +50,7 @@ namespace Shop.Application.CategoriesAdmin.Products
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
+			public string Image { get; set; }
 			public Guid? CategoryId { get; set; }
 		}
 	}

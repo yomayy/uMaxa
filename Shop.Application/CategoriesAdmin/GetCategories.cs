@@ -27,6 +27,7 @@ namespace Shop.Application.CategoriesAdmin
 						Name = y.Name,
 						Description = y?.Description,
 						Value = y.Value,
+						Image = y?.ProductImage,
 						CategoryId = c.Id
 					})
 			});
@@ -37,6 +38,7 @@ namespace Shop.Application.CategoriesAdmin
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
+			public string Image { get; set; }
 			public Guid? CategoryId { get; set; }
 		}
 

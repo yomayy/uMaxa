@@ -1,7 +1,6 @@
 ﻿using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Shop.Application.ProductsAdmin
@@ -20,7 +19,8 @@ namespace Shop.Application.ProductsAdmin
 				Name = request?.Name,
 				Description = request?.Description,
 				Value = request.Value,
-				CategoryId = request?.Category?.Id
+				CategoryId = request?.Category?.Id,
+				ProductImage = request?.Image
 			};
 			if(await _productManager.CreateProduct(product) <= 0) {
 				throw new Exception("Failed to create product");
@@ -31,6 +31,7 @@ namespace Shop.Application.ProductsAdmin
 				Name = product.Name,
 				Description = product.Description,
 				Value = product.Value,
+				Image = product?.ProductImage,
 				Category = new CategoryViewModel {
 					Id = request?.Category?.Id,
 					Name = request?.Category?.Name
@@ -43,6 +44,7 @@ namespace Shop.Application.ProductsAdmin
 			public string Description { get; set; }
 			public decimal Value { get; set; }
 			public CategoryViewModel Category { get; set; } = null;
+			public string Image { get; set; }
 		}
 
 		public class Response
@@ -52,6 +54,7 @@ namespace Shop.Application.ProductsAdmin
 			public string Description { get; set; }
 			public decimal Value { get; set; }
 			public CategoryViewModel Category { get; set; }
+			public string Image { get; set; }
 		}
 
 		public class CategoryViewModel

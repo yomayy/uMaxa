@@ -37,6 +37,5 @@ namespace Shop.UI.Controllers
 				[FromBody] UpdateProduct.Request request,
 				[FromServices] UpdateProduct updateProduct) => 
 			Ok((await updateProduct.DoAsync(request)));
-
 	}
 }

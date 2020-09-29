@@ -5,25 +5,36 @@
 
 <div id="app">
 	<div class="columns">
-		<div class="column is-3">
+		<div class="column is-5">
 			<div class="table-container">
-			<table class="table is-hoverable">
-				<tr v-for="product in products" @@click="selectProduct(product)">
-					<td>
-						<strong>{{product.productName}}</strong><br/><small>{{product.description}}</small>
-					</td>
-				</tr>
-			</table>
+				<table class="table is-hoverable">
+					<tr v-for="product in products" @@click="selectProduct(product)">
+						<td>
+							<strong>{{product.productName}}</strong><br/><small>{{product.description}}</small>
+						</td>
+						<td>
+							<article class="media">
+								<figure class="media-left">
+									<p class="image is-128x128">
+										<img class="image is-128x128" :src="product.image" />
+									</p>
+								</figure>
+							</article>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
-		<div class="column is-6" v-if="selectedProduct">
-			<table class="table">
-				<tr v-for="(stock, index) in selectedProduct.stocks">
-					<td><input class="input" v-model="stock.description" /></td>
-					<td><input class="input" v-model="stock.quantity" /></td>
-					<td><a class="has-text-danger" @@click="deleteStock(stock.id, index)">Delete</a></td>
-				</tr>
-			</table>
+		<div class="column is-4" v-if="selectedProduct">
+			<div class="table-container">
+				<table class="table">
+					<tr v-for="(stock, index) in selectedProduct.stocks">
+						<td><input class="input" v-model="stock.description" /></td>
+						<td><input class="input" v-model="stock.quantity" /></td>
+						<td><a class="has-text-danger" @@click="deleteStock(stock.id, index)">Delete</a></td>
+					</tr>
+				</table>
+			</div>
 			<a class="button is-warning" @@click="updateStock">
 				Update Products
 			</a>

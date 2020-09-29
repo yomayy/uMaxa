@@ -15,6 +15,7 @@
 			name: "ProductName",
 			description: "Product Description",
 			value: 1.99,
+			image: "",
 			categoryId: 0
 		},
 		categories: [],
@@ -29,13 +30,31 @@
 			categoryId: 0,
 			name: "Product name",
 			description: "Product description",
-			value: 1.99
-		}
+			value: 1.99,
+			image: ""
+		},
+		selectedFile: null,
 	},
 	mounted() {
 		this.getCategories();
 	},
 	methods: {
+		onFileSelected(event) {
+			console.log(event);
+			this.selectedFile = event.target.files[0];
+			//
+			const file = event.target.files[0];
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				if (reader.result.slice(0, 10) === 'data:image') {
+					console.log('Result', reader.result);
+					this.productModel.image = reader.result;
+				}
+			};
+			if (file) {
+				reader.readAsDataURL(file);
+			}
+		},
 		getCategory(id) {
 			this.loading = true
 			axios.get('/categories/' + id)

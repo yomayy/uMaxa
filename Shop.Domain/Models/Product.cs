@@ -9,10 +9,11 @@ namespace Shop.Domain.Models
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public decimal Value { get; set; }
+		public string ProductImage { get; set; }
 
 		public ICollection<Stock> Stocks { get; set; }
 
 		public Guid? CategoryId { get; set; }
-		public Category Category { get; set; } = null;
+		public virtual Category Category { get; set; }
 	}
 }

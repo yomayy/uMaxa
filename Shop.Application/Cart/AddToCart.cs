@@ -38,6 +38,7 @@ namespace Shop.Application.Cart
 			var cartProduct = new CartProduct() {
 				ProductId = stock.ProductId,
 				ProductName = stock.Product.Name,
+				ProductImage = stock.Product.ProductImage,
 				StockId = stock.Id,
 				StockDescription = stock.Description,
 				Quantity = request.Quantity,

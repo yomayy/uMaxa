@@ -20,6 +20,11 @@ namespace Shop.Database
 			base.OnModelCreating(builder);
 			builder.Entity<OrderStock>()
 				.HasKey(x => new { x.StockId, x.OrderId });
+
+			builder.Entity<Product>()
+				.HasOne(p => p.Category)
+				.WithMany(c => c.Products)
+				.OnDelete(DeleteBehavior.SetNull);
 		}
 	}
 }

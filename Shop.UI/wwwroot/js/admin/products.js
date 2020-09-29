@@ -9,11 +9,20 @@ var app = new Vue({
 			name: "ProductName",
 			description: "Product Description",
 			value: 1.99,
-			category: null
+			category: null,
+			image: ""
 		},
 		products: [],
 		categories: [],
 		selectedFile: null,
+		userSettings: {
+			photo: null
+		},
+		image: "",
+		tmpCategory: {
+			id: 0,
+			name: ""
+		}
 	},
 	mounted() {
 		this.getProducts();
@@ -22,9 +31,35 @@ var app = new Vue({
 		onFileSelected(event) {
 			console.log(event);
 			this.selectedFile = event.target.files[0];
+			//
+			const file = event.target.files[0];
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				if (reader.result.slice(0, 10) === 'data:image') {
+					console.log('Result', reader.result);
+					this.image = reader.result;
+					this.productModel.image = this.image;
+					//this.createImage();
+					//this.userSettings.photo = reader.result;
+					//this.$emit('transitionImg', reader.result);
+				}
+			};
+			if (file) {
+				reader.readAsDataURL(file);
+			}
 		},
-		onUpload() {
-
+		createImage() {
+			axios.post('/image', this.image)
+				.then(res => {
+					console.log(res.data);
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.loading = false;
+					this.editing = false;
+				})
 		},
 		getProduct(id) {
 			this.loading = true
@@ -37,11 +72,13 @@ var app = new Vue({
 						name: product.name,
 						description: product.description,
 						value: product.value,
+						image: product.image,
 						category: product.category
 					};
+					this.categoryName = this.productModel.category.name;
 				})
 				.catch(err => {
-					console.log(err);
+					console.log('getProduct err', err);
 				})
 				.then(() => {
 					this.loading = false;
@@ -129,7 +166,6 @@ var app = new Vue({
 		editProduct(id, index) {
 			this.objectIndex = index;
 			this.getProduct(id);
-			this.categoryName = this.productModel.category.name;
 			this.editing = true;
 		},
 		cancel() {
