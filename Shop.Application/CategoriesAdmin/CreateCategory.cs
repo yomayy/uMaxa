@@ -2,6 +2,7 @@
 using Shop.Domain.Infrastructure;
 using Shop.Domain.Models;
 using System;
+using System.Collections;
 using System.Threading.Tasks;
 
 namespace Shop.Application.CategoriesAdmin
@@ -28,7 +29,8 @@ namespace Shop.Application.CategoriesAdmin
 				CreatedOn = category?.CreatedOn,
 				ModifiedOn = category?.ModifiedOn,
 				Name = category?.Name,
-				Description = category?.Description
+				Description = category?.Description,
+				Products = null
 			};
 		}
 
@@ -42,6 +44,7 @@ namespace Shop.Application.CategoriesAdmin
 		{
 			public string Name { get; set; }
 			public string Description { get; set; }
+			public ICollection Products { get; set; }
 		}
 	}
 }

@@ -32,6 +32,13 @@ namespace Shop.Database
 			return _context.SaveChangesAsync();
 		}
 
+		public TResult GetProductByIdWithCategory<TResult>(Guid id, Func<Product, TResult> selector) {
+			return _context.Products
+				.Where(x => x.Id == id)
+				.Include(x => x.Category)
+				.Select(selector)
+				.FirstOrDefault();
+		}
 		public TResult GetProductById<TResult>(Guid id, Func<Product, TResult> selector) {
 			return _context.Products
 				.Where(x => x.Id == id)
@@ -51,10 +58,12 @@ namespace Shop.Database
 
 		public IEnumerable<TResult> GetProductsWithStock<TResult>(
 				Func<Product, TResult> selector) {
-			return _context.Products
-				.Include(x => x.Stocks)
+			var products = _context?.Products
+				?.Include(x => x.Stocks)
+				?.Include(x => x.Category)
 				.Select(selector)
 				.ToList();
+			return products;
 		}
 	}
 }

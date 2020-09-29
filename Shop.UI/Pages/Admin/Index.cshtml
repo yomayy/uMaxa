@@ -11,6 +11,7 @@
 				<th>Product</th>
 				<th>Description</th>
 				<th>Value</th>
+				<th>Category</th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -18,6 +19,8 @@
 				<td>{{product.name}}</td>
 				<td>{{product.description}}</td>
 				<td>{{product.value}}</td>
+				<td v-if="product.category.name" style="text-align: center">{{product.category.name}}</td>
+				<td v-else="product.category.name" style="text-align: center">---</td>
 				<td><a class="button has-text-warning-dark" @@click="editProduct(product.id, index)">Edit</a></td>
 				<td><a class="button has-text-danger-dark" @@click="deleteProduct(product.id, index)">Remove</a></td>
 			</tr>
@@ -43,7 +46,29 @@
 				<input class="input" v-model="productModel.value" />
 			</div>
 		</div>
-		<button class="button is-success" @@click="createProduct" v-if="!productModel.id">Create Product</button>
+		<div class="field">
+			<label class="label">Category</label>
+			<div class="select is-fullwidth">
+				<select v-model="productModel.category">
+					<option selected disabled :value="productModel.category">
+						{{productModel.category.name}}
+					</option>
+					<option v-for="category in categories" :key="category.id" :value="category">
+						{{category.name}}
+					</option>
+				</select>
+			</div>
+		</div>
+		@*<div class="field">
+			<label class="label">Image</label>
+			<div class="control">
+				<input type="file" @@change="onFileSelected" />
+				<button @@click="onUpload">Upload</button>
+			</div>
+		</div>*@
+		<button class="button is-success" 
+				@@click="createProduct" 
+				v-if="!productModel.id">Create Product</button>
 		<button class="button is-warning" @@click="updateProduct" v-else="">Update Product</button>
 		<button class="button" @@click="cancel">Cancel</button>
 	</div>

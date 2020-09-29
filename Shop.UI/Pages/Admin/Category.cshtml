@@ -4,10 +4,10 @@
 }
 
 <div id="app" class="container">
-	<div class="columns">
-		<div class="column is-6">
-			<div v-if="!editing">
-				<button class="button is-success" @@click="newCategory">Add new category</button>
+	<div class="columns" v-if="!editing">
+		<div class="column is-6-desktop is-6-tablet">
+			<button class="button is-success" @@click="newCategory">Add new category</button>
+			<div class="table-container">
 				<table class="table is-hoverable">
 					<tr>
 						<th>Category</th>
@@ -24,41 +24,71 @@
 				</table>
 			</div>
 		</div>
-		<div class="column is-6" v-if="selectedCategory && selectedCategory.products.length > 0">
-			<button class="button is-success" @@click="newProduct">Add new product</button>
-			<table class="table is-hoverable">
-				<tr>
-					<th>Name</th>
-					<th>Description</th>
-				</tr>
-				<tr v-for="(product, index) in selectedCategory.products">
-					<td><input class="input" v-model="product.name" /></td>
-					<td><input class="input" v-model="product.description" /></td>
-					@*<td><a class="has-text-danger" @@click="deleteProduct(product.id, index)">Delete</a></td>*@
-				</tr>
-			</table>
-			@*<a class="button is-warning" @@click="updateProduct">
-				Update Products
-			</a>*@
+		<div class="column is-6-desktop is-6-tablet" v-if="selectedCategory">
+			<button class="button is-success" @@click="newCatProduct">Add new product</button>
+			<div class="table-container">
+				<table class="table is-hoverable" v-if="selectedCategory.products">
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+						<th>Value</th>
+					</tr>
+					<tr v-for="(product, index) in selectedCategory.products">
+						<td><input class="input" v-model="product.name" /></td>
+						<td><input class="input" v-model="product.description" /></td>
+						<td><input class="input" v-model="product.value" /></td>
+						<td><a class="has-text-danger" @@click="deleteProduct(product.id, index)">Delete</a></td>
+					</tr>
+				</table>
+			</div>
+			<a class="button is-warning" 
+			   v-if="selectedCategory.products != null && selectedCategory.products.length > 0" 
+			   @@click="updateProduct">
+				Update Product
+			</a>
 		</div>
 	</div>
 
 	<div v-else>
-		<div class="field">
-			<label class="label">Category Name</label>
-			<div class="control">
-				<input class="input" v-model="categoryModel.name" />
+		<div v-if="!addProductFlag">
+			<div class="field">
+				<label class="label">Category Name</label>
+				<div class="control">
+					<input class="input" v-model="categoryModel.name" />
+				</div>
 			</div>
-		</div>
-		<div class="field">
-			<label class="label">Category Description</label>
-			<div class="control">
-				<input class="input" v-model="categoryModel.description" />
+			<div class="field">
+				<label class="label">Category Description</label>
+				<div class="control">
+					<input class="input" v-model="categoryModel.description" />
+				</div>
 			</div>
+			<button class="button is-success" @@click="createCategory" v-if="!categoryModel.id">Create Category</button>
+			<button class="button is-warning" @@click="updateCategory" v-else="">Update Category</button>
+			<button class="button" @@click="cancel">Cancel</button>
 		</div>
-		<button class="button is-success" @@click="createCategory" v-if="!categoryModel.id">Create Category</button>
-		<button class="button is-warning" @@click="updateCategory" v-else="">Update Category</button>
-		<button class="button" @@click="cancel">Cancel</button>
+		<div v-else>
+			<div class="field">
+				<label class="label">Product Name</label>
+				<div class="control">
+					<input class="input" v-model="productModel.name" />
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Product Description</label>
+				<div class="control">
+					<input class="input" v-model="productModel.description" />
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Value</label>
+				<div class="control">
+					<input class="input" v-model="productModel.value" />
+				</div>
+			</div>
+			<button class="button is-success" @@click="createProduct">Create Product</button>
+			<button class="button" @@click="cancel">Cancel</button>
+		</div>
 	</div>
 </div>
 

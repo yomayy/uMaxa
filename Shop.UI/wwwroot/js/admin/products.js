@@ -8,14 +8,24 @@ var app = new Vue({
 			id: 00000000 - 0000 - 0000 - 0000 - 000000000000,
 			name: "ProductName",
 			description: "Product Description",
-			value: 1.99
+			value: 1.99,
+			category: null
 		},
-		products: []
+		products: [],
+		categories: [],
+		selectedFile: null,
 	},
 	mounted() {
 		this.getProducts();
 	},
 	methods: {
+		onFileSelected(event) {
+			console.log(event);
+			this.selectedFile = event.target.files[0];
+		},
+		onUpload() {
+
+		},
 		getProduct(id) {
 			this.loading = true
 			axios.get('/products/' + id)
@@ -26,7 +36,8 @@ var app = new Vue({
 						id: product.id,
 						name: product.name,
 						description: product.description,
-						value: product.value
+						value: product.value,
+						category: product.category
 					};
 				})
 				.catch(err => {
@@ -42,6 +53,21 @@ var app = new Vue({
 				.then(res => {
 					console.log(res);
 					this.products = res.data;
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.getCategories();
+					this.loading = false;
+				});
+		},
+		getCategories() {
+			this.loading = true;
+			axios.get('/categories')
+				.then(res => {
+					console.log(res);
+					this.categories = res.data;
 				})
 				.catch(err => {
 					console.log(err);
@@ -76,6 +102,7 @@ var app = new Vue({
 					console.log(err);
 				})
 				.then(() => {
+					this.getProducts();
 					this.loading = false;
 					this.editing = false;
 				})
@@ -97,10 +124,12 @@ var app = new Vue({
 		newProduct() {
 			this.editing = true;
 			this.productModel.id = 0;
+			this.productModel.category = this.categories[0];
 		},
 		editProduct(id, index) {
 			this.objectIndex = index;
 			this.getProduct(id);
+			this.categoryName = this.productModel.category.name;
 			this.editing = true;
 		},
 		cancel() {

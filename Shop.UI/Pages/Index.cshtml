@@ -5,6 +5,32 @@
 }
 
 <div class="section">
+	<div class="field is-grouped">
+		<p class="control is-expanded">
+			<input class="input" type="text" placeholder="Find a repository">
+		</p>
+		<p class="control">
+			<a class="button is-info">
+				Search
+			</a>
+		</p>
+	</div>
+
+	<div class="dropdown is-hoverable">
+		<div class="dropdown-trigger">
+			<button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+				<span>Categories</span>
+			</button>
+		</div>
+		<div class="dropdown-menu" id="dropdown-menu4" role="menu">
+			<div class="dropdown-content">
+				<div class="dropdown-item">
+					<p>You can insert <strong>any type of content</strong> within the dropdown menu.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="columns is-multiline is-mobile">
 		@{
 			foreach (var p in Model.Products) {
@@ -49,4 +75,17 @@
 			}
 		}
 	</div>
+	<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+		<a class="pagination-previous">Previous</a>
+		<a class="pagination-next">Next page</a>
+		<ul class="pagination-list">
+			<li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+			<li><span class="pagination-ellipsis">&hellip;</span></li>
+			<li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+			<li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+			<li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+			<li><span class="pagination-ellipsis">&hellip;</span></li>
+			<li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+		</ul>
+	</nav>
 </div>

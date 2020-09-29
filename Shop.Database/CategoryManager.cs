@@ -22,6 +22,14 @@ namespace Shop.Database
 		}
 
 		public Task<int> DeleteCategory(Guid id) {
+			//var products = _context.Products
+			//	.Where(p => p.CategoryId == id)
+			//	?.ToList();
+			//products?.ForEach(p => {
+			//	p.CategoryId = null;
+			//});
+			//_context.Products.UpdateRange(products);
+			//_context.SaveChangesAsync();
 			var category = _context.Categories.FirstOrDefault(x => x.Id == id);
 			_context.Categories.Remove(category);
 			return _context.SaveChangesAsync();
@@ -58,5 +66,17 @@ namespace Shop.Database
 			_context.Categories.Update(category);
 			return _context.SaveChangesAsync();
 		}
+
+		// Product in category
+
+		public Task<int> UpdateProductsInCategory(List<Product> products) {
+			_context.Products.UpdateRange(products);
+			return _context.SaveChangesAsync();
+		}
+
+		//public Task<int> CreateProductInCategory(Product product) {
+		//	_context.Products.Add(product);
+		//	return _context.SaveChangesAsync();
+		//}
 	}
 }

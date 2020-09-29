@@ -13,11 +13,15 @@ namespace Shop.Application.ProductsAdmin
 		}
 
 		public ProductViewModel Do(Guid id) =>
-			_productManager.GetProductById(id, p => new ProductViewModel {
+			_productManager.GetProductByIdWithCategory(id, p => new ProductViewModel {
 				Id = p.Id,
 				Name = p.Name,
 				Description = p.Description,
-				Value = p.Value
+				Value = p.Value,
+				Category = new CategoryViewModel {
+					Id = p?.Category?.Id,
+					Name = p?.Category?.Name
+				}
 			});
 
 		public class ProductViewModel
@@ -26,6 +30,13 @@ namespace Shop.Application.ProductsAdmin
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
+			public CategoryViewModel Category { get; set; }
+		}
+
+		public class CategoryViewModel
+		{
+			public Guid? Id { get; set; }
+			public string Name { get; set; }
 		}
 	}
 }

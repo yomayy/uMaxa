@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Application.CategoriesAdmin;
+using Shop.Application.CategoriesAdmin.Products;
 using System;
 using System.Threading.Tasks;
 
@@ -37,5 +38,19 @@ namespace Shop.UI.Controllers
 				[FromBody] UpdateCategory.Request request,
 				[FromServices] UpdateCategory updateCategory) =>
 			Ok((await updateCategory.DoAsync(request)));
+
+		// Product for category
+
+		[HttpPost("{id}/products")]
+		public async Task<IActionResult> CreateProductInCategory(
+				[FromBody] CreateProductInCategory.Request request,
+				[FromServices] CreateProductInCategory createProductInCategory) =>
+			Ok((await createProductInCategory.DoAsync(request)));
+
+		[HttpPut("{id}/products")]
+		public async Task<IActionResult> UpdateProductsInCategory(
+				[FromBody] UpdateProductsInCategory.Request request,
+				[FromServices] UpdateProductsInCategory updateProductsInCategory) =>
+			Ok((await updateProductsInCategory.DoAsync(request)));
 	}
 }

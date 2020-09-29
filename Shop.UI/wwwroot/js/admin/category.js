@@ -3,11 +3,19 @@
 	data: {
 		editing: false,
 		loading: false,
+		addProductFlag: false,
 		objectIndex: 0,
 		categoryModel: {
 			id: 00000000 - 0000 - 0000 - 0000 - 000000000000,
 			name: "CategoryName",
 			description: "Category Description"
+		},
+		productModel: {
+			id: 00000000 - 0000 - 0000 - 0000 - 000000000000,
+			name: "ProductName",
+			description: "Product Description",
+			value: 1.99,
+			categoryId: 0
 		},
 		categories: [],
 		//selectedCategory: {
@@ -74,6 +82,7 @@
 				.then(() => {
 					this.loading = false;
 					this.editing = false;
+					this.getCategories();
 				})
 		},
 		updateCategory() {
@@ -87,6 +96,7 @@
 					console.log(err);
 				})
 				.then(() => {
+					this.getCategories();
 					this.loading = false;
 					this.editing = false;
 				})
@@ -122,8 +132,70 @@
 			this.selectedCategory = category;
 			this.newProduct.categoryId = category.id;
 		},
-		newProduct() {
-
+		///
+		/// Product
+		///
+		newCatProduct() {
+			this.editing = true;
+			this.addProductFlag = true;
+			this.productModel.id = 0;
+			this.productModel.categoryId = this.selectedCategory.id;
+		},
+		createProduct() {
+			this.loading = true;
+			axios.post('/categories/' + this.selectedCategory.id + '/products', this.productModel)
+				.then(res => {
+					console.log(res.data);
+					this.selectedCategory.products.push(res.data);
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.loading = false;
+					this.editing = false;
+					this.getCategories();
+				})
+		},
+		deleteProduct(id, index) {
+			this.loading = true
+			axios.delete('/products/' + id)
+				.then(res => {
+					console.log(res);
+					this.selectedCategory.products.splice(index, 1);
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.loading = false;
+				});
+		},
+		updateProduct() {
+			this.loading = true;
+			axios.put('/categories/' + this.selectedCategory.id + '/products', {
+				products: this.selectedCategory.products.map(x => {
+					return {
+						id: x.id,
+						name: x.name,
+						description: x.description,
+						value: x.value,
+						createdOn: x.createdOn,
+						modifiedOn: x.modifiedOn,
+						categoryId: this.selectedCategory.id
+					};
+				})
+			})
+				.then(res => {
+					console.log(res);
+					this.selectedCategory.products.splice(index, 1);
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.loading = false;
+				});
 		}
 	},
 	computed: {

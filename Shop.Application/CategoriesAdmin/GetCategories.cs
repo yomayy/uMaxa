@@ -26,6 +26,7 @@ namespace Shop.Application.CategoriesAdmin
 						Id = y.Id,
 						Name = y.Name,
 						Description = y?.Description,
+						Value = y.Value,
 						CategoryId = c.Id
 					})
 			});
@@ -35,6 +36,7 @@ namespace Shop.Application.CategoriesAdmin
 		{
 			public string Name { get; set; }
 			public string Description { get; set; }
+			public decimal Value { get; set; }
 			public Guid? CategoryId { get; set; }
 		}
 

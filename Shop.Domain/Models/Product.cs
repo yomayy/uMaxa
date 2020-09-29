@@ -13,6 +13,6 @@ namespace Shop.Domain.Models
 		public ICollection<Stock> Stocks { get; set; }
 
 		public Guid? CategoryId { get; set; }
-		public Category Category { get; set; }
+		public Category Category { get; set; } = null;
 	}
 }

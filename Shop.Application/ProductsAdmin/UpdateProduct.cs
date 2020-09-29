@@ -21,6 +21,7 @@ namespace Shop.Application.ProductsAdmin
 			product.Description = request.Description;
 			product.Value = request.Value;
 			product.ModifiedOn = DateTime.UtcNow;
+			product.CategoryId = request.Category.Id;
 
 			await _productManager.UpdateProduct(product);
 
@@ -29,7 +30,11 @@ namespace Shop.Application.ProductsAdmin
 				Name = product.Name,
 				Description = product.Description,
 				Value = product.Value,
-				ModifiedOn = product.ModifiedOn
+				ModifiedOn = product.ModifiedOn,
+				Category = new CategoryViewModel {
+					Id = request?.Category?.Id,
+					Name = request?.Category?.Name
+				}
 			};
 		}
 		public class Request
@@ -38,6 +43,7 @@ namespace Shop.Application.ProductsAdmin
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
+			public CategoryViewModel Category { get; set; }
 		}
 
 		public class Response
@@ -47,6 +53,13 @@ namespace Shop.Application.ProductsAdmin
 			public string Description { get; set; }
 			public decimal Value { get; set; }
 			public DateTime? ModifiedOn { get; set; }
+			public CategoryViewModel Category { get; set; }
+		}
+
+		public class CategoryViewModel
+		{
+			public Guid? Id { get; set; }
+			public string Name { get; set; }
 		}
 	}
 }

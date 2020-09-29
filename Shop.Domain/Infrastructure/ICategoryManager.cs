@@ -11,6 +11,11 @@ namespace Shop.Domain.Infrastructure
 		Task<int> DeleteCategory(Guid id);
 		Task<int> UpdateCategory(Category category);
 
+		#region Product in category
+		Task<int> UpdateProductsInCategory(List<Product> products);
+		//Task<int> CreateProductInCategory(Product product);
+		#endregion
+
 		TResult GetCategoryById<TResult>(Guid id, Func<Category, TResult> selector);
 		TResult GetCategoryByName<TResult>(string name, Func<Category, TResult> selector);
 		IEnumerable<TResult> GetCategoriesWithProduct<TResult>(Func<Category, TResult> selector);
