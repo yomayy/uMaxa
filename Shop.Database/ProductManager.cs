@@ -65,5 +65,31 @@ namespace Shop.Database
 				.ToList();
 			return products;
 		}
+
+		public IEnumerable<TResult> GetProductsWithStock<TResult>(
+				Func<Product, TResult> selector,
+				int pageNumber = 1, int pageSize = 2) {
+			int excludeRecords = (pageSize - pageNumber) - pageSize;
+			var products = _context?.Products
+				?.Include(x => x.Stocks)
+				?.Include(x => x.Category)
+				?.Skip(excludeRecords)
+				?.Take(pageSize)
+				.Select(selector)
+				.ToList();
+			return products;
+		}
+
+		public IEnumerable<TResult> GetProductByCategoryId<TResult>(
+				Guid? categoryId, 
+				Func<Product, TResult> selector) {
+			var products = _context?.Products
+				?.Where(p => p.CategoryId == categoryId)
+				?.Include(x => x.Stocks)
+				?.Include(x => x.Category)
+				.Select(selector)
+				.ToList();
+			return products;
+		}
 	}
 }

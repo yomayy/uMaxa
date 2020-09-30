@@ -37,5 +37,14 @@ namespace Shop.UI.Controllers
 				[FromBody] UpdateProduct.Request request,
 				[FromServices] UpdateProduct updateProduct) => 
 			Ok((await updateProduct.DoAsync(request)));
+
+		// For paging:
+
+		public IActionResult Index(
+				[FromServices] Application.Products.GetProducts getProducts,
+				int pageNumber = 1, int pageSize = 2) {
+			var products = getProducts.Do(pageNumber, pageSize);
+			return View();
+		}
 	}
 }

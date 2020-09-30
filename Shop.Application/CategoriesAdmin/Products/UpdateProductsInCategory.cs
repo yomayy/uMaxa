@@ -24,6 +24,7 @@ namespace Shop.Application.CategoriesAdmin.Products
 					Name = product?.Name,
 					Description = product?.Description,
 					Value = product.Value,
+					ProductImage = product?.Image,
 					CategoryId = product?.CategoryId,
 					CreatedOn = product?.CreatedOn,
 					ModifiedOn = DateTime.UtcNow
@@ -40,6 +41,7 @@ namespace Shop.Application.CategoriesAdmin.Products
 			public string Name { get; set; }
 			public string Description { get; set; }
 			public decimal Value { get; set; }
+			public string Image { get; set; }
 			public Guid? CategoryId { get; set; }
 		}
 

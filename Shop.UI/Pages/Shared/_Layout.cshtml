@@ -33,9 +33,9 @@
 		<div id="navbarBasicExample" class="navbar-menu">
 			<div class="navbar-start">
 				@if (User.Identity.IsAuthenticated) {
-				<a class="navbar-item" asp-page="/Admin/Index">
-					Admin
-				</a>
+					<a class="navbar-item" asp-page="/Admin/Index">
+						Admin
+					</a>
 				}
 			</div>
 
@@ -45,7 +45,7 @@
 
 
 				@if (User.Identity.IsAuthenticated) {
-				<a class="navbar-item" asp-controller="Account" asp-action="Logout">Sign Out</a>
+					<a class="navbar-item" asp-controller="Account" asp-action="Logout">Sign Out</a>
 				}
 			</div>
 		</div>
@@ -54,6 +54,8 @@
 	<partial name="_CookieConsentPartial" />
 
 	<div class="container body-content">
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 		@RenderBody()
 	</div>
 	<footer class="footer">
@@ -74,6 +76,7 @@
 	<environment exclude="Production">
 		<script src="~/js/site.min.js" asp-append-version="true"></script>
 	</environment>
+
 
 	@RenderSection("Scripts", required: false)
 </body>

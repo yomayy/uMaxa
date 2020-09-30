@@ -1,10 +1,10 @@
-﻿@page
+﻿@page "{handler?}"
 @model IndexModel
 @{
 	ViewData["Title"] = "Home page";
 }
 
-<div class="section">
+<div class="section" id="app">
 	<div class="field is-grouped">
 		<p class="control is-expanded">
 			<input class="input" type="text" placeholder="Find a repository">
@@ -15,8 +15,8 @@
 			</a>
 		</p>
 	</div>
-
-	<div class="dropdown is-hoverable">
+	<br />
+	@*<div class="dropdown is-hoverable">
 		<div class="dropdown-trigger">
 			<button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
 				<span>Categories</span>
@@ -29,52 +29,81 @@
 				</div>
 			</div>
 		</div>
+	</div>*@
+
+<div class="columns">
+	<div class="column is-2 is-hidden-mobile">
+		<div class="table-container">
+			<a asp-page="Index" class="button">All Categories</a>
+			<table class="table is-hoverable">
+				@{ 
+					foreach (var category in Model.Categories) {
+						<tr>
+							@if (category.Id.ToString() == Model.selectedCategoryId) {
+								<td class="is-selected">
+									<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
+								</td>
+							}
+							else {
+								<td>
+									<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
+								</td>
+							}
+						</tr>
+					}
+				}
+			</table>
+		</div>
 	</div>
 
-	<div class="columns is-multiline is-mobile">
-		@{
-			foreach (var p in Model.Products) {
-				<div class="column is-3-desktop is-4-tablet is-6-mobile">
-					<a asp-page="Product" asp-route-name="@p.Name.Replace(" ", "-")">
-						<div class="card">
-							<div class="card-image">
-								<figure class="image is-4by3">
-									<img src="@p.Image" />
-								</figure>
-							</div>
-							<div class="card-content">
-								<p class="title is-size-5">
-									@p.Name - @p.Value
-								</p>
-								<p class="subtitle">
-									@p.Description
-								</p>
+	<div class="column is-10">
+		<div class="columns is-multiline is-mobile">
+			@{
+				foreach (var p in Model.Products) {
+					<div class="column is-3-desktop is-4-tablet is-6-mobile">
+						<a asp-page="Product" asp-route-name="@p.Name.Replace(" ", "-")">
+							<div class="card">
+								<div class="card-image">
+									<figure class="image is-4by3">
+										<img src="@p.Image" />
+									</figure>
+								</div>
+								<div class="card-content">
+									<p class="title is-size-5 has-text-centered">
+										@p.Name - @p.Value
+									</p>
+									<p class="subtitle has-text-centered">
+										@p.Description
+									</p>
 
-								@{
-									string cssClass = string.Empty;
-									string message = string.Empty;
-									if (p.StockCount == 0) {
-										cssClass = "is-danger";
-										message = "Out of Stock";
+									@{
+										string cssClass = string.Empty;
+										string message = string.Empty;
+										if (p.StockCount == 0) {
+											cssClass = "is-danger";
+											message = "Out of Stock";
+										}
+										else if (p.StockCount <= 10) {
+											cssClass = "is-warning";
+											message = "Low on Stock";
+										}
 									}
-									else if (p.StockCount <= 10) {
-										cssClass = "is-warning";
-										message = "Low on Stock";
+									@if (p.StockCount <= 10) {
+										<div class="notification is-paddingless has-text-centered @cssClass">
+											@message
+										</div>
 									}
-								}
-								@if (p.StockCount <= 10) {
-									<div class="notification is-paddingless has-text-centered @cssClass">
-										@message
-									</div>
-								}
 
+								</div>
 							</div>
-						</div>
-					</a>
-				</div>
+						</a>
+					</div>
+				}
 			}
-		}
+		</div>
 	</div>
+
+</div>
 	<nav class="pagination is-centered" role="navigation" aria-label="pagination">
 		<a class="pagination-previous">Previous</a>
 		<a class="pagination-next">Next page</a>
@@ -89,3 +118,7 @@
 		</ul>
 	</nav>
 </div>
+
+@section scripts{ 
+	<script src="~/js/product/product.js"></script>
+}

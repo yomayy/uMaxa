@@ -13,7 +13,9 @@ namespace Shop.Domain.Infrastructure
 
 		TResult GetProductByIdWithCategory<TResult>(Guid id, Func<Product, TResult> selector);
 		TResult GetProductById<TResult>(Guid id, Func<Product, TResult> selector);
+		IEnumerable<TResult> GetProductByCategoryId<TResult>(Guid? categoryId, Func<Product, TResult> selector);
 		TResult GetProductByName<TResult>(string name, Func<Product, TResult> selector);
 		IEnumerable<TResult> GetProductsWithStock<TResult>(Func<Product, TResult> selector);
+		IEnumerable<TResult> GetProductsWithStock<TResult>(Func<Product, TResult> selector, int pageNumber = 1, int pageSize = 2);
 	}
 }

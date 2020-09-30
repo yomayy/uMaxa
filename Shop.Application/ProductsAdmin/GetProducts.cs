@@ -1,7 +1,7 @@
 ﻿using Shop.Domain.Infrastructure;
-using Shop.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shop.Application.ProductsAdmin
 {
@@ -21,6 +21,7 @@ namespace Shop.Application.ProductsAdmin
 				Description = p.Description,
 				Value = p.Value,
 				Image = p?.ProductImage,
+				StockCount = p.Stocks.Sum(y => y.Quantity),
 				Category = new CategoryViewModel {
 					Id = p?.Category?.Id,
 					Name = p?.Category?.Name
@@ -36,6 +37,7 @@ namespace Shop.Application.ProductsAdmin
 			public string Description { get; set; }
 			public decimal Value { get; set; }
 			public string Image { get; set; }
+			public int StockCount { get; set; }
 			public CategoryViewModel Category { get; set; } = null;
 		}
 

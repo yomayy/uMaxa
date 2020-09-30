@@ -52,5 +52,11 @@ namespace Shop.UI.Controllers
 				[FromBody] UpdateProductsInCategory.Request request,
 				[FromServices] UpdateProductsInCategory updateProductsInCategory) =>
 			Ok((await updateProductsInCategory.DoAsync(request)));
+
+		[HttpGet("{id}/products")]
+		public IActionResult GetProductsInCategory(
+				string categoryId,
+				[FromServices] GetProductsInCategory getProductsInCategory) =>
+			Ok(getProductsInCategory.Do(categoryId));
 	}
 }

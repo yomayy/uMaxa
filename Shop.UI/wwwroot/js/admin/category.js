@@ -199,6 +199,7 @@
 						name: x.name,
 						description: x.description,
 						value: x.value,
+						image: x.image,
 						createdOn: x.createdOn,
 						modifiedOn: x.modifiedOn,
 						categoryId: this.selectedCategory.id
