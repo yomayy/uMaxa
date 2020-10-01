@@ -15,9 +15,6 @@ var app = new Vue({
 		products: [],
 		categories: [],
 		selectedFile: null,
-		userSettings: {
-			photo: null
-		},
 		image: "",
 		tmpCategory: {
 			id: 0,
@@ -34,32 +31,25 @@ var app = new Vue({
 			//
 			const file = event.target.files[0];
 			const reader = new FileReader();
-			reader.onloadend = () => {
-				if (reader.result.slice(0, 10) === 'data:image') {
-					console.log('Result', reader.result);
-					this.image = reader.result;
-					this.productModel.image = this.image;
-					//this.createImage();
-					//this.userSettings.photo = reader.result;
-					//this.$emit('transitionImg', reader.result);
+			const fileLimit = 1000000;
+
+			if (file.size <= fileLimit) {
+				reader.onloadend = () => {
+					if (reader.result.slice(0, 10) === 'data:image') {
+						console.log('Result', reader.result);
+						this.image = reader.result;
+						this.productModel.image = this.image;
+					}
+					else {
+						alert('not image');
+					}
+				};
+				if (file) {
+					reader.readAsDataURL(file);
 				}
-			};
-			if (file) {
-				reader.readAsDataURL(file);
+			} else {
+				alert('to big file selected');
 			}
-		},
-		createImage() {
-			axios.post('/image', this.image)
-				.then(res => {
-					console.log(res.data);
-				})
-				.catch(err => {
-					console.log(err);
-				})
-				.then(() => {
-					this.loading = false;
-					this.editing = false;
-				})
 		},
 		getProduct(id) {
 			this.loading = true
@@ -161,6 +151,7 @@ var app = new Vue({
 		newProduct() {
 			this.editing = true;
 			this.productModel.id = 0;
+			this.productModel.image = "";
 			this.productModel.category = this.categories[0];
 		},
 		editProduct(id, index) {

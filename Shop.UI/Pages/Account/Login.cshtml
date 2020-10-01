@@ -3,6 +3,8 @@
 @{
 }
 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js'></script>
+
 <div class="container is-centered columns">
 	<div class="column is-4">
 
@@ -10,14 +12,24 @@
 	<div class="column is-4">
 		<form method="post">
 			<div class="field">
-				<input class="input" asp-for="Input.Username"
-					   type="text" placeholder="Username" style="max-width: 200px">
-				<span class="help is-danger" asp-validation-for="Input.Username"></span>
+				<p class="control has-icons-left">
+					<input class="input" asp-for="Input.Username"
+						   type="text" placeholder="Username" style="max-width: 200px">
+					<span class="icon is-small is-left">
+						<i class="fas fa-user"></i>
+					</span>
+					<span class="help is-danger" asp-validation-for="Input.Username"></span>
+				</p>
 			</div>
 			<div class="field">
-				<input class="input" asp-for="Input.Password"
-					   type="password" placeholder="Password" style="max-width: 200px">
-				<span class="help is-danger" asp-validation-for="Input.Password"></span>
+				<p class="control has-icons-left">
+					<input class="input" asp-for="Input.Password"
+						   type="password" placeholder="Password" style="max-width: 200px">
+					<span class="icon is-small is-left">
+						<i class="fas fa-lock"></i>
+					</span>
+					<span class="help is-danger" asp-validation-for="Input.Password"></span>
+				</p>
 			</div>
 			<div class="field">
 				<p class="control">

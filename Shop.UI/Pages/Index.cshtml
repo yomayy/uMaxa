@@ -7,7 +7,7 @@
 <div class="section" id="app">
 	<div class="field is-grouped">
 		<p class="control is-expanded">
-			<input class="input" type="text" placeholder="Find a repository">
+			<input class="input" type="text" placeholder="Find a product">
 		</p>
 		<p class="control">
 			<a class="button is-info">
@@ -16,108 +16,126 @@
 		</p>
 	</div>
 	<br />
-	@*<div class="dropdown is-hoverable">
-		<div class="dropdown-trigger">
-			<button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
-				<span>Categories</span>
-			</button>
-		</div>
-		<div class="dropdown-menu" id="dropdown-menu4" role="menu">
-			<div class="dropdown-content">
-				<div class="dropdown-item">
-					<p>You can insert <strong>any type of content</strong> within the dropdown menu.</p>
-				</div>
+
+	<div class="columns">
+		<div class="column is-2 is-hidden-mobile">
+			<div class="table-container">
+				<a asp-page="Index" class="button">
+					All Categories
+				</a>
+				<table class="table is-hoverable">
+					@{
+						foreach (var category in Model.IndexViewModel.Categories) {
+							<tr>
+								@if (category.Id.ToString() == Model.selectedCategoryId) {
+									<td class="is-selected">
+										<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
+									</td>
+								}
+								else {
+									<td>
+										<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
+									</td>
+								}
+							</tr>
+						}
+					}
+				</table>
 			</div>
 		</div>
-	</div>*@
+		<div class="column is-10">
+			<div class="columns is-multiline is-mobile">
+				@{
+					foreach (var p in Model.IndexViewModel.Products) {
+						<div class="column is-3-desktop is-4-tablet is-6-mobile">
+							<a asp-page="Product" asp-route-name="@p.Name.Replace(" ", "-")">
+								<div class="card">
+									<div class="card-image">
+										<figure class="image is-4by3">
+											<img src="@p.Image" />
+										</figure>
+									</div>
+									<div class="card-content">
+										<p class="title is-size-5 has-text-centered">
+											@p.Name - @p.Value
+										</p>
+										<p class="subtitle has-text-centered">
+											@p.Description
+										</p>
 
-<div class="columns">
-	<div class="column is-2 is-hidden-mobile">
-		<div class="table-container">
-			<a asp-page="Index" class="button">All Categories</a>
-			<table class="table is-hoverable">
-				@{ 
-					foreach (var category in Model.Categories) {
-						<tr>
-							@if (category.Id.ToString() == Model.selectedCategoryId) {
-								<td class="is-selected">
-									<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
-								</td>
-							}
-							else {
-								<td>
-									<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
-								</td>
-							}
-						</tr>
+										@{
+											string cssClass = string.Empty;
+											string message = string.Empty;
+											if (p.StockCount == 0) {
+												cssClass = "is-danger";
+												message = "Out of Stock";
+											}
+											else if (p.StockCount <= 10) {
+												cssClass = "is-warning";
+												message = "Low on Stock";
+											}
+										}
+										@if (p.StockCount <= 10) {
+											<div class="notification is-paddingless has-text-centered @cssClass">
+												@message
+											</div>
+										}
+
+									</div>
+								</div>
+							</a>
+						</div>
 					}
 				}
-			</table>
+			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="column is-10">
-		<div class="columns is-multiline is-mobile">
-			@{
-				foreach (var p in Model.Products) {
-					<div class="column is-3-desktop is-4-tablet is-6-mobile">
-						<a asp-page="Product" asp-route-name="@p.Name.Replace(" ", "-")">
-							<div class="card">
-								<div class="card-image">
-									<figure class="image is-4by3">
-										<img src="@p.Image" />
-									</figure>
-								</div>
-								<div class="card-content">
-									<p class="title is-size-5 has-text-centered">
-										@p.Name - @p.Value
-									</p>
-									<p class="subtitle has-text-centered">
-										@p.Description
-									</p>
-
-									@{
-										string cssClass = string.Empty;
-										string message = string.Empty;
-										if (p.StockCount == 0) {
-											cssClass = "is-danger";
-											message = "Out of Stock";
-										}
-										else if (p.StockCount <= 10) {
-											cssClass = "is-warning";
-											message = "Low on Stock";
-										}
-									}
-									@if (p.StockCount <= 10) {
-										<div class="notification is-paddingless has-text-centered @cssClass">
-											@message
-										</div>
-									}
-
-								</div>
-							</div>
-						</a>
-					</div>
-				}
+<div style="margin-bottom: 10px">
+	<div class="has-text-centered">
+		@if (Model.PageViewModel.HasPreviousPage) {
+			if (string.IsNullOrEmpty(Model.selectedCategoryId)) {
+				<a asp-page="Index"
+				   asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+				   class="button">
+					Back
+				</a>
 			}
-		</div>
+			else {
+				<a asp-page="Index"
+				   asp-page-handler="ByCategoryId"
+				   asp-route-categoryId="@Model.selectedCategoryId"
+				   asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+				   class="button">
+					Back
+				</a>
+			}
+		}
+		<a class="button is-active are-medium is-primary">
+			@Model.PageViewModel.PageNumber
+		</a>
+		@if (Model.PageViewModel.HasNextPage) {
+			if (string.IsNullOrEmpty(Model.selectedCategoryId)) {
+				<a asp-page="Index"
+				   asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+				   class="button">
+					Next
+				</a>
+			}
+			else {
+				<a asp-page="Index"
+				   asp-page-handler="ByCategoryId"
+				   asp-route-categoryId="@Model.selectedCategoryId"
+				   asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+				   class="button">
+					Next
+				</a>
+			}
+		}
 	</div>
+</div>
 
-</div>
-	<nav class="pagination is-centered" role="navigation" aria-label="pagination">
-		<a class="pagination-previous">Previous</a>
-		<a class="pagination-next">Next page</a>
-		<ul class="pagination-list">
-			<li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-			<li><span class="pagination-ellipsis">&hellip;</span></li>
-			<li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-			<li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-			<li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-			<li><span class="pagination-ellipsis">&hellip;</span></li>
-			<li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-		</ul>
-	</nav>
-</div>
 
 @section scripts{ 
 	<script src="~/js/product/product.js"></script>

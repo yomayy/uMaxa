@@ -2,6 +2,7 @@
 @model Shop.UI.Pages.Admin.IndexModel
 @{
 }
+<script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js'></script>
 
 <div id="app" class="container">
 	<div v-if="!editing">
@@ -26,8 +27,8 @@
 					<td>
 						<article class="media">
 							<figure class="media-left">
-								<p class="image is-128x128">
-									<img class="image is-128x128" :src="product.image" />
+								<p class="image is-96x96">
+									<img class="image is-96x96" :src="product.image" />
 								</p>
 							</figure>
 						</article>
@@ -39,49 +40,72 @@
 		</div>
 	</div>
 
-	<div v-else>
-		<div class="field">
-			<label class="label">Product Name</label>
-			<div class="control">
-				<input class="input" v-model="productModel.name" />
+	<div class="columns" v-else>
+		<div class="column is-6">
+			<div class="field">
+				<label class="label">Product Name</label>
+				<div class="control">
+					<input class="input" v-model="productModel.name" />
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Product Description</label>
+				<div class="control">
+					<input class="input" v-model="productModel.description" />
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Value</label>
+				<div class="control">
+					<input class="input" v-model="productModel.value" />
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Category</label>
+				<div class="select is-fullwidth">
+					<select v-model="productModel.category">
+						<option selected disabled :value="productModel.category">
+							{{productModel.category.name}}
+						</option>
+						<option v-for="category in categories" :key="category.id" :value="category">
+							{{category.name}}
+						</option>
+					</select>
+				</div>
+			</div>
+			<div class="field">
+				<label class="label">Image</label>
+				<div class="file">
+					<label class="file-label">
+						<input class="file-input" type="file" name="resume" @@change="onFileSelected">
+						<span class="file-cta">
+							<span class="file-icon">
+								<i class="fas fa-upload"></i>
+							</span>
+							<span class="file-label">
+								Choose a file…
+							</span>
+						</span>
+					</label>
+				</div>
+			</div>
+			<button class="button is-success"
+					@@click="createProduct"
+					v-if="!productModel.id">
+				Create Product
+			</button>
+			<button class="button is-warning" @@click="updateProduct" v-else="">Update Product</button>
+			<button class="button" @@click="cancel">Cancel</button>
+		</div>
+		<div class="column is-6">
+			<div class="field">
+				<label class="label">Image</label>
+				<figure class="image is-4by3">
+					<img v-if="productModel.image == ''" src="https://bulma.io/images/placeholders/640x480.png">
+					<img v-else :src="productModel.image">
+				</figure>
 			</div>
 		</div>
-		<div class="field">
-			<label class="label">Product Description</label>
-			<div class="control">
-				<input class="input" v-model="productModel.description" />
-			</div>
-		</div>
-		<div class="field">
-			<label class="label">Value</label>
-			<div class="control">
-				<input class="input" v-model="productModel.value" />
-			</div>
-		</div>
-		<div class="field">
-			<label class="label">Category</label>
-			<div class="select is-fullwidth">
-				<select v-model="productModel.category">
-					<option selected disabled :value="productModel.category">
-						{{productModel.category.name}}
-					</option>
-					<option v-for="category in categories" :key="category.id" :value="category">
-						{{category.name}}
-					</option>
-				</select>
-			</div>
-		</div>
-		<div class="field">
-			<label class="label">Image</label>
-			<div class="control">
-				<input type="file" class="input" @@change="onFileSelected" />
-			</div>
-		</div>
-		<button class="button is-success" 
-				@@click="createProduct" 
-				v-if="!productModel.id">Create Product</button>
-		<button class="button is-warning" @@click="updateProduct" v-else="">Update Product</button>
-		<button class="button" @@click="cancel">Cancel</button>
 	</div>
 </div>
 
