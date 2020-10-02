@@ -68,6 +68,18 @@ namespace Shop.Database
 
 		public IEnumerable<TResult> GetProductsWithStock<TResult>(
 				Func<Product, TResult> selector,
+				string searchString) {
+			var products = _context?.Products
+				?.Where(p => p.Name.Contains(searchString))
+				?.Include(x => x.Stocks)
+				?.Include(x => x.Category)
+				.Select(selector)
+				.ToList();
+			return products;
+		}
+
+		public IEnumerable<TResult> GetProductsWithStock<TResult>(
+				Func<Product, TResult> selector,
 				int pageNumber, int pageSize) {
 			int excludeRecords = (pageSize * pageNumber) - pageSize;
 			var products = _context?.Products

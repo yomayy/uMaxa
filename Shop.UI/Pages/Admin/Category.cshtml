@@ -26,6 +26,19 @@
 		</div>
 		<div class="column is-6-desktop is-6-tablet" v-if="selectedCategory">
 			<button class="button is-success" @@click="newCatProduct">Add new product</button>
+			<br /><br />
+
+			<div class="field is-grouped">
+				<p class="control is-expanded">
+					<input class="input" type="text" placeholder="Find a product by Name">
+				</p>
+				<p class="control">
+					<a class="button is-info">
+						Search
+					</a>
+				</p>
+			</div>
+
 			<div class="table-container">
 				<table class="table is-hoverable" v-if="selectedCategory.products">
 					<tr>
@@ -51,10 +64,10 @@
 					</tr>
 				</table>
 			</div>
-			<a class="button is-warning" 
-			   v-if="selectedCategory.products != null && selectedCategory.products.length > 0" 
+			<a class="button is-warning"
+			   v-if="selectedCategory.products != null && selectedCategory.products.length > 0"
 			   @@click="updateProduct">
-				Update Product
+				Update Products
 			</a>
 		</div>
 	</div>

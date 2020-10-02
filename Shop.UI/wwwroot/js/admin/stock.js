@@ -7,15 +7,48 @@
 			productId: 0,
 			description: "Size",
 			quantity: 10
-		}
+		},
+		pageNumber: 1,
+		pageSize: 3,
+		productsCount: 1,
+		totalPages: 0
 	},
 	mounted() {
+		this.getProductsCount();
 		this.getStock();
 	},
+	computed: {
+		// todo: create paging here
+	},
 	methods: {
+		setTotalPages() {
+			this.totalPages = Math.ceil(this.productsCount / this.pageSize);
+		},
+		getProductsCount() {
+			this.loading = true
+			axios.get('/products/count')
+				.then(res => {
+					console.log(res);
+					this.productsCount = res.data;
+					//this.totalPages = Math.ceil(this.productsCount / this.pageSize);
+					this.setTotalPages();
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.loading = false;
+				});
+		},
 		getStock() {
 			this.loading = true;
-			axios.get('/stocks')
+			axios.get('/stocks',
+				{
+					params: {
+						pageNumber: this.pageNumber,
+						pageSize: this.pageSize
+					}
+				})
 				.then(res => {
 					console.log(res);
 					this.products = res.data;
@@ -83,6 +116,16 @@
 		selectProduct(product) {
 			this.selectedProduct = product;
 			this.newStock.productId = product.id;
+		},
+		nextPage() {
+			this.pageNumber++;
+			this.getStock();
+			this.selectedProduct = null;
+		},
+		prevPage() {
+			this.pageNumber--;
+			this.getStock();
+			this.selectedProduct = null;
 		}
 	}
 })

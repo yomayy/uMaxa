@@ -10,7 +10,7 @@
 	},
 	mounted() {
 		//this.getCategories();
-		this.getProducts();
+		//this.getProducts();
 	},
 	methods: {
 		getCId(id) {

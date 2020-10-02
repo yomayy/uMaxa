@@ -38,6 +38,9 @@
 	mounted() {
 		this.getCategories();
 	},
+	computed: {
+		// todo: create paging here
+	},
 	methods: {
 		onFileSelected(event) {
 			console.log(event);
@@ -76,7 +79,8 @@
 		},
 		getCategories() {
 			this.loading = true
-			axios.get('/categories')
+			axios.get('/categories'
+				)
 				.then(res => {
 					console.log(res);
 					this.categories = res.data;
@@ -216,8 +220,6 @@
 				.then(() => {
 					this.loading = false;
 				});
-		}
-	},
-	computed: {
+		},
 	}
 })

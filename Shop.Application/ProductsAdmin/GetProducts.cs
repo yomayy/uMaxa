@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Shop.Application.ProductsAdmin
 {
@@ -14,7 +15,8 @@ namespace Shop.Application.ProductsAdmin
 			_productManager = productManager;
 		}
 
-		public IEnumerable<ProductViewModel> Do() {
+		public IEnumerable<ProductViewModel> Do(
+				int pageNumber, int pageSize) {
 			var products = _productManager.GetProductsWithStock(p => new ProductViewModel {
 				Id = p.Id,
 				Name = p.Name,
@@ -26,8 +28,16 @@ namespace Shop.Application.ProductsAdmin
 					Id = p?.Category?.Id,
 					Name = p?.Category?.Name
 				}
-			});
+			}, pageNumber, pageSize);
 			return products;
+		}
+
+		public Task<int> GetProductsCount() {
+			return _productManager.GetProductsCount();
+		}
+		
+		public Task<int> GetProductsCount(Guid? categoryId) {
+			return _productManager.GetProductsCount(categoryId);
 		}
 
 		public class ProductViewModel

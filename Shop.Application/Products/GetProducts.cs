@@ -25,6 +25,16 @@ namespace Shop.Application.Products
 			});
 		}
 
+		public IEnumerable<ProductViewModel> Do(string searchString) {
+			return _productManager.GetProductsWithStock(p => new ProductViewModel {
+				Name = p.Name,
+				Description = p.Description,
+				Value = p.Value.GetValueString(),
+				Image = p?.ProductImage,
+				StockCount = p.Stocks.Sum(y => y.Quantity)
+			}, searchString);
+		}
+
 		public IEnumerable<ProductViewModel> Do(string categoryId,
 				int pageNumber, int pageSize) {
 			Guid? cid = Guid.Parse(categoryId);

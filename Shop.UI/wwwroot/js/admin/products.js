@@ -16,13 +16,17 @@ var app = new Vue({
 		categories: [],
 		selectedFile: null,
 		image: "",
-		tmpCategory: {
-			id: 0,
-			name: ""
-		}
+		pageNumber: 1,
+		pageSize: 3,
+		productsCount: 1,
+		totalPages: 0
 	},
 	mounted() {
+		this.getProductsCount();
 		this.getProducts();
+	},
+	computed: {
+		// todo: create paging here
 	},
 	methods: {
 		onFileSelected(event) {
@@ -74,9 +78,34 @@ var app = new Vue({
 					this.loading = false;
 				});
 		},
+		setTotalPages() {
+			this.totalPages = Math.ceil(this.productsCount / this.pageSize);
+		},
+		getProductsCount() {
+			this.loading = true
+			axios.get('/products/count')
+				.then(res => {
+					console.log(res);
+					this.productsCount = res.data;
+					//this.totalPages = Math.ceil(this.productsCount / this.pageSize);
+					this.setTotalPages();
+				})
+				.catch(err => {
+					console.log(err);
+				})
+				.then(() => {
+					this.loading = false;
+				});
+		},
 		getProducts() {
 			this.loading = true
-			axios.get('/products')
+			axios.get('/products',
+				{
+					params: {
+						pageNumber: this.pageNumber,
+						pageSize: this.pageSize
+					}
+				})
 				.then(res => {
 					console.log(res);
 					this.products = res.data;
@@ -109,6 +138,8 @@ var app = new Vue({
 				.then(res => {
 					console.log(res.data);
 					this.products.push(res.data);
+					this.productsCount++;
+					this.setTotalPages();
 				})
 				.catch(err => {
 					console.log(err);
@@ -140,6 +171,8 @@ var app = new Vue({
 				.then(res => {
 					console.log(res);
 					this.products.splice(index, 1);
+					this.productsCount--;
+					this.setTotalPages();
 				})
 				.catch(err => {
 					console.log(err);
@@ -161,8 +194,14 @@ var app = new Vue({
 		},
 		cancel() {
 			this.editing = false;
+		},
+		nextPage() {
+			this.pageNumber++;
+			this.getProducts();
+		},
+		prevPage() {
+			this.pageNumber--;
+			this.getProducts();
 		}
-	},
-	computed: {
 	}
 })

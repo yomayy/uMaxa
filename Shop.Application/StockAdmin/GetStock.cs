@@ -15,7 +15,8 @@ namespace Shop.Application.StockAdmin
 			_productManager = productManager;
 		}
 
-		public IEnumerable<ProductViewModel> Do() {
+		public IEnumerable<ProductViewModel> Do(
+				int pageNumber, int pageSize) {
 			return _productManager.GetProductsWithStock(x => 
 				new ProductViewModel {
 					Id = x.Id,
@@ -30,7 +31,7 @@ namespace Shop.Application.StockAdmin
 							CreatedOn = y.CreatedOn,
 							ModifiedOn = y.ModifiedOn
 						})
-				});
+				}, pageNumber, pageSize);
 		}
 
 		public class StockViewModel : DbBase

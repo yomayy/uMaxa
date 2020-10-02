@@ -6,6 +6,7 @@ using Shop.Application.Products.Paging;
 
 namespace Shop.UI.Pages
 {
+	[BindProperties]
 	public class IndexModel : PageModel
 	{
 		public IndexViewModel IndexViewModel { get; set; }
@@ -14,6 +15,9 @@ namespace Shop.UI.Pages
 		public string selectedCategoryId = "";
 
 		private const int PageZize = 2;
+
+		[BindProperty(SupportsGet = true)]
+		public string SearchString { get; set; }
 
 		public void OnGet(
 				[FromServices] GetProducts getProducts,
@@ -41,6 +45,21 @@ namespace Shop.UI.Pages
 			var taskCount = getProducts.GetProductsCount(selectedCategoryId);
 			int count = taskCount.Result;
 			PageViewModel = new PageViewModel(count, pageNumber, PageZize);
+		}
+
+		public void OnGetSearchProduct(
+				[FromServices] GetProducts getProducts,
+				[FromServices] GetCategories getCategories,
+				string searchString) {
+			IndexViewModel = new IndexViewModel {
+				Products = string.IsNullOrEmpty(searchString) 
+					? getProducts.Do(1, PageZize)
+					: getProducts.Do(searchString),
+				Categories = getCategories.Do()
+			};
+			var taskCount = getProducts.GetProductsCount();
+			int count = taskCount.Result;
+			PageViewModel = new PageViewModel(count, 1, PageZize);
 		}
 	}
 }

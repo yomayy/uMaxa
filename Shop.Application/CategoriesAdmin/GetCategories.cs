@@ -33,6 +33,24 @@ namespace Shop.Application.CategoriesAdmin
 			});
 		}
 
+		public IEnumerable<CategoryViewModel> Do(
+				int pageNumber, int pageSize) {
+			return _categoryManager.GetCategoriesWithProductPaging(c => new CategoryViewModel {
+				Id = c.Id,
+				Name = c.Name,
+				Description = c?.Description,
+				Products = c?.Products
+					.Select(y => new ProductViewModel {
+						Id = y.Id,
+						Name = y.Name,
+						Description = y?.Description,
+						Value = y.Value,
+						Image = y?.ProductImage,
+						CategoryId = c.Id
+					})
+			}, pageNumber, pageSize);
+		}
+
 		public class ProductViewModel : DbBase
 		{
 			public string Name { get; set; }

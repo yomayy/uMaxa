@@ -12,7 +12,8 @@ namespace Shop.UI.Controllers
 	public class CategoriesController : Controller
 	{
 		[HttpGet("")]
-		public IActionResult GetCategories([FromServices] GetCategories getCategories) =>
+		public IActionResult GetCategories(
+				[FromServices] GetCategories getCategories) =>
 			Ok(getCategories.Do());
 
 		[HttpGet("{id}")]

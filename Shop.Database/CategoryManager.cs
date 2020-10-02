@@ -43,6 +43,19 @@ namespace Shop.Database
 				.ToList();
 		}
 
+		public IEnumerable<TResult> GetCategoriesWithProductPaging<TResult>(
+				Func<Category, TResult> selector,
+				int pageNumber, int pageSize) {
+			int excludeRecords = (pageSize * pageNumber) - pageSize;
+			return _context.Categories
+				.Include(x => x.Products
+					.Skip(excludeRecords)
+					.Take(pageSize)
+				)
+				.Select(selector)
+				.ToList();
+		}
+
 		public TResult GetCategoryById<TResult>(
 				Guid id, 
 				Func<Category, TResult> selector) {

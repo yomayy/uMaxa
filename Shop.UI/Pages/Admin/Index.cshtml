@@ -38,6 +38,19 @@
 				</tr>
 			</table>
 		</div>
+		<div style="margin-bottom: 10px">
+			<div class="has-text-centered">
+				<button class="button" @@click="prevPage" v-if="pageNumber!=1">
+					Previous
+				</button>
+				<button class="button is-primary">
+					{{pageNumber}}
+				</button>
+				<button class="button" @@click="nextPage" v-if="pageNumber < totalPages">
+					Next
+				</button>
+			</div>
+		</div>
 	</div>
 
 	<div class="columns" v-else>
