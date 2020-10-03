@@ -13,18 +13,53 @@
 			</ul>
 		</div>
 		<div v-if="orders.length > 0">
-			<p v-for="order in orders">
-				<a @@click="selectOrder(order.id)">{{order.orderRef}} - {{order.email}}</a>
-			</p>
+			<div class="table-container">
+				<table class="table is-hoverable">
+					<tr>
+						<td><strong>Order reference</strong></td>
+						<td><strong>Recipient</strong></td>
+						<th></th>
+					</tr>
+					<tr v-for="order in orders">
+						<td>
+							{{order.orderRef}}
+						</td>
+						<td>
+							{{order.email}}
+						</td>
+						<td>
+							<a @@click="selectOrder(order.id)">
+								Update Status
+							</a>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
 	</div>
 	<div v-else>
-		<p>
-			<button @@click="exitOrder()">Exit</button>
-		</p>
-		<p class="title">{{selectedOrder.orderRef}}</p>
-		<p class="title">{{selectedOrder.email}}</p>
-		<button @@click="updateOrder()">Process</button>
+		<div class="card">
+			<div class="card-content">
+				<p class="title">
+					{{selectedOrder.orderRef}}
+				</p>
+				<p class="subtitle">
+					{{selectedOrder.email}}
+				</p>
+			</div>
+			<footer class="card-footer">
+				<p class="card-footer-item">
+					<span>
+						<a @@click="exitOrder()">Exit</a>
+					</span>
+				</p>
+				<p class="card-footer-item">
+					<span>
+						<a @@click="updateOrder()">Process</a>
+					</span>
+				</p>
+			</footer>
+		</div>
 	</div>
 </div>
 

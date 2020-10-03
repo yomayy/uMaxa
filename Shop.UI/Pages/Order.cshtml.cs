@@ -10,8 +10,7 @@ namespace Shop.UI.Pages
 
 		public void OnGet(
 				string reference,
-				[FromServices] GetOrder getOrder)
-        {
+				[FromServices] GetOrder getOrder) {
             Order = getOrder.Do(reference);
         }
     }

@@ -44,7 +44,22 @@
 					console.log(result.data);
 					this.loading = false;
 					this.exitOrder();
+					//
+					//this.sendEmail();
+					//
 					this.getOrders();
+					// todo: email
+				})
+				.catch(err => {
+					console.log(err);
+				})
+		},
+		sendEmail() {
+			axios.post('/orders/' + this.selectedOrder.id + '/send', null)
+				.then(result => {
+					console.log(result.data);
+					this.loading = false;
+
 				})
 				.catch(err => {
 					console.log(err);

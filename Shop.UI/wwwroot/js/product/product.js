@@ -6,13 +6,17 @@
 		categoryFlag: false,
 		categories: [],
 		products: [],
-		selectedCategory: null
+		selectedCategory: null,
+		categoryName: "All categories"
 	},
 	mounted() {
 		//this.getCategories();
 		//this.getProducts();
 	},
 	methods: {
+		setCategoryName(name) {
+			this.categoryName = name;
+		},
 		getCId(id) {
 			return id;
 		},

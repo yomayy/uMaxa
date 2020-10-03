@@ -3,6 +3,7 @@
 @{
 	ViewData["Title"] = "Home page";
 }
+<script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js'></script>
 
 <div class="section" id="app">
 	<form class="is-expanded" method="get"
@@ -20,38 +21,44 @@
 	<br />
 
 	<div class="columns">
-		<div class="column is-2 is-hidden-mobile">
-			<div class="table-container">
-				<a asp-page="Index" class="button">
-					All Categories
-				</a>
-				<table class="table is-hoverable">
-					@{
-						foreach (var category in Model.IndexViewModel.Categories) {
-							<tr>
+		<div class="column is-2">
+			<div class="dropdown">
+				<div class="dropdown-trigger">
+					<button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+						<span>All categories</span>
+						<span class="icon is-small">
+							<i class="fas fa-angle-down" aria-hidden="true"></i>
+						</span>
+					</button>
+				</div>
+				<div class="dropdown-menu" id="dropdown-menu" role="menu" style="width: inherit">
+					<div class="dropdown-content">
+						<a asp-page="Index" class="dropdown-item">
+							All
+						</a>
+						<hr class="dropdown-divider">
+						@{
+							foreach (var category in Model.IndexViewModel.Categories) {
 								@if (category.Id.ToString() == Model.selectedCategoryId) {
-									<td class="is-selected">
-										<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
-									</td>
+									<a class="dropdown-item is-active" asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
 								}
 								else {
-									<td>
-										<a asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
-									</td>
+									<a class="dropdown-item" asp-page="Index" asp-page-handler="ByCategoryId" asp-route-categoryId="@category.Id">@category.Name</a>
 								}
-							</tr>
+							}
 						}
-					}
-				</table>
+					</div>
+				</div>
 			</div>
 		</div>
+		
 		<div class="column is-10">
 
 			@if (!string.IsNullOrEmpty(Model.SearchString)
-				&& Model.IndexViewModel.Products.Count() > 0) {
+			   && Model.IndexViewModel.Products.Count() > 0) {
 				<p class="subtitle">result for <strong>"@Model.SearchString"</strong> :</p>
 			}
-			else if(Model.IndexViewModel.Products.Count() == 0){
+			else if (Model.IndexViewModel.Products.Count() == 0) {
 				<p class="subtitle">no results were found for <strong>"@Model.SearchString"</strong></p>
 			}
 			<div class="columns is-multiline is-mobile">
@@ -146,7 +153,13 @@
 	</div>
 </div>
 
-
-@section scripts{ 
+@section scripts{
 	<script src="~/js/product/product.js"></script>
+	<script>
+		var dropdown = document.querySelector('.dropdown');
+		dropdown.addEventListener('click', function (event) {
+			event.stopPropagation();
+			dropdown.classList.toggle('is-active');
+		});
+	</script>
 }

@@ -25,6 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
 			@this.AddTransient<IOrderManager, OrderManager>();
 			@this.AddTransient<ICategoryManager, CategoryManager>();
 			@this.AddScoped<ISessionManager, SessionManager>();
+			@this.AddScoped<EmailManager>();
 
 			return @this;
 		}
