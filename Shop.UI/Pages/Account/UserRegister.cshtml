@@ -1,0 +1,35 @@
+﻿@page "{handler?}"
+@model Shop.UI.Pages.Account.UserRegisterModel
+@{
+}
+
+<h2>Registration</h2>
+
+<form method="post" asp-page-handler="UserRegister" asp-anti-forgery="true">
+	<div class="validation" asp-validation-summary="ModelOnly"></div>
+	<div>
+		<div>
+			<label asp-for="@Model.Input.UserName">UserName</label><br />
+			<input type="text" asp-for="@Model.Input.UserName" />
+			<span asp-validation-for="@Model.Input.UserName" />
+		</div>
+		<div>
+			<label asp-for="@Model.Input.Email">Email</label><br />
+			<input asp-for="@Model.Input.Email" />
+			<span asp-validation-for="@Model.Input.Email" />
+		</div>
+		<div>
+			<label asp-for="@Model.Input.Password">Password</label><br />
+			<input asp-for="@Model.Input.Password" />
+			<span asp-validation-for="@Model.Input.Password" />
+		</div>
+		<div>
+			<label asp-for="@Model.Input.ConfirmPassword">ConfirmPassword</label><br />
+			<input asp-for="@Model.Input.ConfirmPassword" />
+			<span asp-validation-for="@Model.Input.ConfirmPassword" />
+		</div>
+		<div>
+			<input type="submit" value="Register" />
+		</div>
+	</div>
+</form>

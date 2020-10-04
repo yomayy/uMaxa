@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -17,6 +19,11 @@ namespace Shop.UI.Controllers
 			await _signInManager.SignOutAsync();
 
 			return RedirectToPage("/Index");
+		}
+
+		public async Task<IActionResult> LogoutShopUser() {
+			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			return RedirectToAction("Login", "Account");
 		}
 	}
 }

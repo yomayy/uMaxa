@@ -24,6 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
 			@this.AddTransient<IProductManager, ProductManager>();
 			@this.AddTransient<IOrderManager, OrderManager>();
 			@this.AddTransient<ICategoryManager, CategoryManager>();
+			@this.AddTransient<IShopUserManager, ShopUserManager>();
 			@this.AddScoped<ISessionManager, SessionManager>();
 			@this.AddScoped<EmailManager>();
 

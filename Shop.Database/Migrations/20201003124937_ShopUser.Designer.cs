@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Database;
 
 namespace Shop.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201003124937_ShopUser")]
+    partial class ShopUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,26 +281,6 @@ namespace Shop.Database.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Shop.Domain.Models.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ShopRoles");
-
-                    b.HasData(
-                        new { Id = new Guid("79831caa-83c8-4335-bbfc-c864f6529a06"), CreatedOn = new DateTime(2020, 10, 3, 18, 58, 25, 753, DateTimeKind.Utc), ModifiedOn = new DateTime(2020, 10, 3, 18, 58, 25, 754, DateTimeKind.Utc), Name = "user" }
-                    );
-                });
-
             modelBuilder.Entity("Shop.Domain.Models.ShopUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -306,19 +288,13 @@ namespace Shop.Database.Migrations
 
                     b.Property<DateTime?>("CreatedOn");
 
-                    b.Property<string>("Email");
-
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name");
 
                     b.Property<string>("Password");
 
-                    b.Property<Guid?>("RoleId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("ShopUsers");
                 });
@@ -436,13 +412,6 @@ namespace Shop.Database.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("Shop.Domain.Models.ShopUser", b =>
-                {
-                    b.HasOne("Shop.Domain.Models.Role", "Role")
-                        .WithMany("ShopUsers")
-                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Shop.Domain.Models.Stock", b =>

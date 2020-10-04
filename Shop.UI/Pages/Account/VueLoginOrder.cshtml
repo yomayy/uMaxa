@@ -1,0 +1,58 @@
+﻿@page
+@model Shop.UI.Pages.Account.VueLoginOrderModel
+@{
+}
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0-2/js/all.min.js'></script>
+
+<div id="app" class="container">
+	<p>Hi <strong>@Model.Email</strong>!</p>
+	<label class="label">Orders</label>
+	<button class="button" @@click="getOrders('@Model.Email')">GetOrders</button>
+	<div class="columns is-multiline is-mobile">
+		<div v-for="order in orderModel" class="column">
+			<div class="card">
+				<div class="card-content">
+					<label class="label">Order Details:</label>
+					address1: {{order.address1}}<br />
+					address2: {{order.address2}}<br />
+					city: {{order.city}}<br />
+					firstName: {{order.firstName}}<br />
+					lastName: {{order.lastName}}<br />
+					orderRef: {{order.orderRef}}<br />
+					phoneNumber: {{order.phoneNumber}}<br />
+					postCode: {{order.postCode}}<br />
+					status: {{order.status}}<br />
+					@*stripeReference: {{order.stripeReference}}<br />*@
+					<div class="columns is-multiline is-mobile">
+						<div v-for="stockViewModel in order.orderStockViewModel" class="column">
+							<div class="card">
+								<div class="card-content">
+									<label class="label">Stock Details:</label>
+									description: {{stockViewModel.stock.description}}<br />
+									quantity: {{stockViewModel.stock.quantity}}
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-content">
+									<label class="label">Product Details:</label>
+									description: {{stockViewModel.stock.productViewModel.name}}<br />
+									quantity: {{stockViewModel.stock.productViewModel.value}} $ <br />
+									<div class="card-image">
+										<figure class="image is-96x96">
+											<img :src="stockViewModel.stock.productViewModel.productImage" />
+										</figure>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section scripts {
+	<script src="~/js/loginOrder/loginOrder.js"></script>>
+}

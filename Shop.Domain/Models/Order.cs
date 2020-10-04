@@ -1,5 +1,6 @@
 ﻿using Shop.Domain.BaseModels;
 using Shop.Domain.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Shop.Domain.Models
@@ -20,5 +21,8 @@ namespace Shop.Domain.Models
 		public OrderStatus Status { get; set; }
 
 		public ICollection<OrderStock> OrderStocks { get; set; }
+
+		public Guid? ShopUserId { get; set; }
+		public ShopUser ShopUser { get; set; }
 	}
 }

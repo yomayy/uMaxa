@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Database;
 
 namespace Shop.Database.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201003130402_ShopRoles")]
+    partial class ShopRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,10 +295,6 @@ namespace Shop.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ShopRoles");
-
-                    b.HasData(
-                        new { Id = new Guid("79831caa-83c8-4335-bbfc-c864f6529a06"), CreatedOn = new DateTime(2020, 10, 3, 18, 58, 25, 753, DateTimeKind.Utc), ModifiedOn = new DateTime(2020, 10, 3, 18, 58, 25, 754, DateTimeKind.Utc), Name = "user" }
-                    );
                 });
 
             modelBuilder.Entity("Shop.Domain.Models.ShopUser", b =>
@@ -305,8 +303,6 @@ namespace Shop.Database.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime?>("CreatedOn");
-
-                    b.Property<string>("Email");
 
                     b.Property<DateTime?>("ModifiedOn");
 

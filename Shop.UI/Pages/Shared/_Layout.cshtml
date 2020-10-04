@@ -32,7 +32,7 @@
 
 		<div id="navbarBasicExample" class="navbar-menu">
 			<div class="navbar-start">
-				@if (User.Identity.IsAuthenticated) {
+				@if (User.Identity.IsAuthenticated && User.HasClaim("Role", "Manager")) {
 					<a class="navbar-item" asp-page="/Admin/Index">
 						Admin
 					</a>
@@ -46,6 +46,12 @@
 
 				@if (User.Identity.IsAuthenticated) {
 					<a class="navbar-item" asp-controller="Account" asp-action="Logout">Sign Out</a>
+				}
+				@if (User.Claims.Any(c => c.Value == "user")) {
+					<a class="navbar-item" asp-controller="Account" asp-action="Logout">Sign Out</a>
+				}
+				@if (!User.Identity.IsAuthenticated || !User.HasClaim("Role", "Manager")) {
+					<a class="navbar-item" asp-page="/Account/UserLogin">LogIn</a>
 				}
 			</div>
 		</div>

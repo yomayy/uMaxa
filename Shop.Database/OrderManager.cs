@@ -21,6 +21,18 @@ namespace Shop.Database
 			return _context.Orders.Any(x => x.OrderRef == reference);
 		}
 
+		public IEnumerable<TResult> GetOrderByEmail<TResult>(
+				Func<Order, TResult> selector, string email) {
+			var orderResult = _context.Orders
+				?.Where(o => o.Email == email)
+				?.Include(o => o.OrderStocks)
+					?.ThenInclude(os => os.Stock)
+						?.ThenInclude(s => s.Product)
+				?.Select(selector)
+				?.ToList();
+			return orderResult;
+		}
+
 		public IEnumerable<TResult> GetOrdersByStatus<TResult>(OrderStatus status, Func<Order, TResult> selector) {
 			return _context.Orders
 				.Where(x => x.Status == status)
